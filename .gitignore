@@ -24,3 +24,8 @@ proguard/
 
 # Log Files
 *.log
+libs/android-support-v4.jar
+proguard-project.txt
+.project
+project.properties
+.classpath
