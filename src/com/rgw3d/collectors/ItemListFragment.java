@@ -76,7 +76,8 @@ public class ItemListFragment extends ListFragment {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		Log.d("Debug","It managed to get here");
-		/*
+		
+		
 		if (savedInstanceState.getInt(ARG_ITEM_HASH)!=0) {
 			Log.d("Debug","It has the key ARG_ITEM_HASH");
 			// Load the dummy content specified by the fragment
@@ -90,11 +91,11 @@ public class ItemListFragment extends ListFragment {
 			//mItem = DummyContent.ITEM_MAP.get(getArguments().getString(
 			//		ARG_ITEM_PREFIX));
 		}
-		*/
-		//else{
+		
+		else{
 			Log.d("Debug", "it does not have the key");
 			Root = DummyContent.x;
-		//}
+		}
 			
 		
 		setListAdapter(new ArrayAdapter<CollectionItem>(getActivity(),

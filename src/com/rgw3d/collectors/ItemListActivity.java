@@ -3,6 +3,7 @@ package com.rgw3d.collectors;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
+import android.support.v7.app.ActionBarActivity;
 
 /**
  * An activity representing a list of Items. This activity has different
@@ -19,7 +20,7 @@ import android.support.v4.app.FragmentActivity;
  * This activity also implements the required {@link ItemListFragment.Callbacks}
  * interface to listen for item selections.
  */
-public class ItemListActivity extends FragmentActivity implements
+public class ItemListActivity extends ActionBarActivity implements
 		ItemListFragment.Callbacks {
 
 	/**
@@ -32,6 +33,20 @@ public class ItemListActivity extends FragmentActivity implements
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_item_list);
+		
+		
+			Bundle arguments = new Bundle();
+			if(savedInstanceState != null){
+			arguments.putInt(ItemListFragment.ARG_ITEM_HASH, 
+					getIntent().getExtras()
+					.getInt(ItemListFragment.ARG_ITEM_HASH));
+			}
+			ItemListFragment fragment = new ItemListFragment();
+			fragment.setArguments(arguments);
+			getSupportFragmentManager().beginTransaction()
+				.add(R.id.item_list_container, fragment).commit();
+		
+		
 
 		
 		
