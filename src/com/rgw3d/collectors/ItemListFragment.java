@@ -78,7 +78,7 @@ public class ItemListFragment extends ListFragment {
 		Log.d("Debug","It managed to get here");
 		
 		
-		if (savedInstanceState.getInt(ARG_ITEM_HASH)!=0) {
+		if (savedInstanceState != null && savedInstanceState.getInt(ARG_ITEM_HASH)!=0) {
 			Log.d("Debug","It has the key ARG_ITEM_HASH");
 			// Load the dummy content specified by the fragment
 			// arguments. In a real-world scenario, use a Loader
