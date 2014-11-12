@@ -78,12 +78,12 @@ public class ItemListFragment extends ListFragment {
 		Log.d("Debug","It managed to get here");
 		
 		
-		if (savedInstanceState != null && savedInstanceState.getInt(ARG_ITEM_HASH)!=0) {
+		if (getArguments() != null && getArguments().containsKey(ARG_ITEM_HASH)) {
 			Log.d("Debug","It has the key ARG_ITEM_HASH");
 			// Load the dummy content specified by the fragment
 			// arguments. In a real-world scenario, use a Loader
 			// to load content from a content provider.
-			Root = findChildObject(savedInstanceState.getInt(ARG_ITEM_HASH),DummyContent.x);
+			Root = findChildObject(getArguments().getInt(ARG_ITEM_HASH),DummyContent.x);
 			Log.d("Debug",Root.toString());
 			if(Root == null){
 				Log.e("Error in ItemDetailFragment", "mItem is null.  Hashcode sent was wrong");

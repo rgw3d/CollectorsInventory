@@ -36,7 +36,7 @@ public class ItemListActivity extends ActionBarActivity implements
 		
 		
 			Bundle arguments = new Bundle();
-			if(savedInstanceState != null){
+			if(getIntent()!= null && getIntent().hasExtra(ItemListFragment.ARG_ITEM_HASH)){
 			arguments.putInt(ItemListFragment.ARG_ITEM_HASH, 
 					getIntent().getExtras()
 					.getInt(ItemListFragment.ARG_ITEM_HASH));
