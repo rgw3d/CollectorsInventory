@@ -33,6 +33,10 @@ public class ItemDetailFragment extends Fragment {
 	 * The CollectionItem that is specified
 	 */
 	private CollectionItem mItem;
+	
+	public CollectionItem getmItem(){
+		return mItem;
+	}
 
 	/**
 	 * Mandatory empty constructor for the fragment manager to instantiate the

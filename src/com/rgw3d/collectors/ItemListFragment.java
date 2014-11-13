@@ -84,7 +84,6 @@ public class ItemListFragment extends ListFragment {
 			// arguments. In a real-world scenario, use a Loader
 			// to load content from a content provider.
 			Root = findChildObject(getArguments().getInt(ARG_ITEM_HASH),DummyContent.x);
-			Log.d("Debug",Root.toString());
 			if(Root == null){
 				Log.e("Error in ItemDetailFragment", "mItem is null.  Hashcode sent was wrong");
 			}
@@ -114,7 +113,8 @@ public class ItemListFragment extends ListFragment {
 	 * @return correct CollectionItem specified by hashcode
 	 */
 	private CollectionItem findChildObject(int hashCode, CollectionItem root) {
-		
+		if(root.hashCode() == hashCode)
+			return root;
 		for(CollectionItem x: root.getChildren()){
 			if(x.hashCode() == hashCode)
 				return x;
@@ -127,6 +127,7 @@ public class ItemListFragment extends ListFragment {
 		return null;
 		
 	}
+	
 	
 
 	@Override
@@ -172,6 +173,10 @@ public class ItemListFragment extends ListFragment {
 		
 		
 		//have it look at the current item on display, check its children and get their get(position) and from there use their id.  
+		Log.d("Item Selection Bug", ""+Root.getChildren().size());
+		for(CollectionItem x: Root.getChildren()){
+			Log.d("Item Selection Bug", x.toString());
+		}
 		
 		mCallbacks.onItemSelected(Root.getChildren(position).isItem(),Root.getChildren(position).hashCode());//this calls the method from the Activity class above it
 		//DummyContent.ITEMS.get(position).id

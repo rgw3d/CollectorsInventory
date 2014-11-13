@@ -69,7 +69,7 @@ public class DummyContent {
 				baby2.addDescription("Field 1", "WOW WOW WOW ");
 				baby2.addNewFieldAndDescript("Field 2", "The description 2");
 			
-			child4.addChildren(baby2);
+			child4.addChildren(baby1);
 			child4.addChildren(baby2);
 		
 		x.addChildren(child1);

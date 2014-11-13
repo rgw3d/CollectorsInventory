@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v4.app.NavUtils;
+import android.util.Log;
 import android.view.MenuItem;
 
 /**
@@ -16,6 +17,8 @@ import android.view.MenuItem;
  */
 public class ItemDetailActivity extends ActionBarActivity {
 
+	public ItemDetailFragment createdFragment;
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -41,6 +44,7 @@ public class ItemDetailActivity extends ActionBarActivity {
 					.getExtras().getInt(ItemDetailFragment.ARG_ITEM_HASH));//getIntent() gets the bundle that was sent
 					//.getStringExtra(ItemDetailFragment.ARG_ITEM_PREFIX));
 			ItemDetailFragment fragment = new ItemDetailFragment();//new fragment created
+			createdFragment = fragment;
 			fragment.setArguments(arguments);
 			getSupportFragmentManager().beginTransaction()
 					.add(R.id.item_detail_container, fragment).commit();
@@ -58,8 +62,17 @@ public class ItemDetailActivity extends ActionBarActivity {
 			//
 			// http://developer.android.com/design/patterns/navigation.html#up-vs-back
 			//
-			NavUtils.navigateUpTo(this,
-					new Intent(this, ItemListActivity.class));
+			
+			Intent intent = new Intent(this,ItemListActivity.class);
+			Log.d("Debug","about to test");
+			if(createdFragment.getmItem()!=null && createdFragment.getmItem().getParent()!=null){
+				Log.d("Debug","putting in the hash");
+				intent.putExtra(ItemListFragment.ARG_ITEM_HASH, createdFragment.getmItem().getParent().hashCode());
+				
+			}
+			else
+				Log.d("Debug","it returned false");
+			NavUtils.navigateUpTo(this,intent);
 			return true;
 		}
 		return super.onOptionsItemSelected(item);

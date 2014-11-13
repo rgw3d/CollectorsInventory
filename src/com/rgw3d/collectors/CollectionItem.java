@@ -21,7 +21,6 @@ public class CollectionItem {
 	private ArrayList<CollectionItem> Children = null;
 	private boolean IsItem = true;
 	private String Name = "Detail 1";
-	private String Prefix = "";
 	private Map<String, ArrayList<String>> Description = null;
 	public int Position=0;
 	
@@ -89,9 +88,10 @@ public class CollectionItem {
 		return Children.get(indx);
 	}
 	
-	public String getPrefix(){
-		return Prefix;
+	public CollectionItem getParent(){
+		return Parent;
 	}
+	
 	
 	public Map<String,ArrayList<String>> getDescription(){
 		

@@ -2,8 +2,8 @@ package com.rgw3d.collectors;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.ActionBarActivity;
+import android.util.Log;
 
 /**
  * An activity representing a list of Items. This activity has different
@@ -65,6 +65,8 @@ public class ItemListActivity extends ActionBarActivity implements
 
 		// TODO: If exposing deep links into your app, handle intents here.
 	}
+	
+	
 
 	/**
 	 * Callback method from {@link ItemListFragment.Callbacks} indicating that
