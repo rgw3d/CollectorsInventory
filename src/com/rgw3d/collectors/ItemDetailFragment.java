@@ -53,7 +53,6 @@ public class ItemDetailFragment extends Fragment {
 			// arguments. In a real-world scenario, use a Loader
 			// to load content from a content provider.
 			mItem = CollectionItem.findChildObject(getArguments().getInt(ARG_ITEM_HASH),DummyContent.x);
-			Log.d("Debug",mItem.toString());
 			if(mItem == null){
 				Log.e("Error in ItemDetailFragment", "mItem is null.  Hashcode sent was wrong");
 			}
@@ -71,17 +70,17 @@ public class ItemDetailFragment extends Fragment {
 				container, false);
 		
 		if(mItem != null) {
-			Log.d("Debug","It is making the views");
+			Log.d("Detail Fragment","It is making the views");
 			ListView lv = (ListView) rootView.findViewById(R.id.listView1);
 			
 			ArrayList<String> stringDescript = new ArrayList<String>();//to be passed to arrayAdapter
 			
 			Map<String, ArrayList<String>> Description = mItem.getDescription();
 			for(String key: Description.keySet().toArray(new String[0])){//add each field
-				Log.d("Debug","The key: "+key);
+				Log.d("Detail Fragment","The key: "+key);
 				String paragraphs = "";
 				for(String descript: Description.get(key)){//add each description under the field
-					Log.d("Debug","The descript: "+descript);
+					Log.d("Detail Fragment","The descript: "+descript);
 					
 					paragraphs+="<small>"+descript+"</small> <br />";
 				}

@@ -79,11 +79,10 @@ public class ItemListFragment extends ListFragment {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		Log.d("Debug","It managed to get here");
 		
 		
 		if (getArguments() != null && getArguments().containsKey(ARG_ITEM_HASH)) {
-			Log.d("Debug","It has the key ARG_ITEM_HASH");
+			Log.d("Starting List Fragment","It has the key ARG_ITEM_HASH");
 			// Load the dummy content specified by the fragment
 			// arguments. In a real-world scenario, use a Loader
 			// to load content from a content provider.
@@ -91,12 +90,10 @@ public class ItemListFragment extends ListFragment {
 			if(Root == null){
 				Log.e("Error in ItemDetailFragment", "mItem is null.  Hashcode sent was wrong");
 			}
-			//mItem = DummyContent.ITEM_MAP.get(getArguments().getString(
-			//		ARG_ITEM_PREFIX));
 		}
 		
 		else{
-			Log.d("Debug", "it does not have the key");
+			Log.d("Starting List Fragment", "it does not have the key");
 			Root = DummyContent.x;
 		}
 			
