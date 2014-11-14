@@ -51,14 +51,14 @@ public class ItemListActivity extends ActionBarActivity implements
 					.getInt(ItemListFragment.ARG_ITEM_HASH));
 				
 				Root = CollectionItem.findChildObject(getIntent().getExtras().getInt(ItemListFragment.ARG_ITEM_HASH), DummyContent.x);
-				if(Root == DummyContent.x)
-					Root = null;
+				
 			}
 			
 			ItemListFragment fragment = new ItemListFragment();
 			fragment.setArguments(arguments);
 			getSupportFragmentManager().beginTransaction()
 				.add(R.id.item_list_container, fragment).commit();
+			Log.d("Item List Activity", "Fragment Transaction Complete");
 		
 			
 
@@ -80,6 +80,7 @@ public class ItemListActivity extends ActionBarActivity implements
 		// TODO: If exposing deep links into your app, handle intents here.
 		
 		//display the up arrow if applicable
+		Log.d("Action bar","About to test");
 		if(Root!= null){
 			getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 			Log.d("Action bar","it will display");
@@ -121,7 +122,7 @@ public class ItemListActivity extends ActionBarActivity implements
 				//of the fragment that it wants to start
 				startActivity(detailIntent);
 			}
-			else{//TODO: add implementaiton of going to another list
+			else{
 				Intent listIntent = new Intent(this, ItemListActivity.class);
 				listIntent.putExtra(ItemListFragment.ARG_ITEM_HASH, hashCode);
 				
