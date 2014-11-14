@@ -29,7 +29,11 @@ public class ItemListFragment extends ListFragment {
 
 	public static String ARG_ITEM_HASH = "item_hash";
 	
-	public static CollectionItem Root;
+	public CollectionItem Root;
+	
+	public CollectionItem getRoot(){
+		return Root;
+	}
 	
 	
 	/**

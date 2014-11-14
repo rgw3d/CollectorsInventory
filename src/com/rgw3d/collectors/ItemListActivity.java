@@ -1,9 +1,16 @@
 package com.rgw3d.collectors;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.NavUtils;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
+import android.view.MenuItem;
+import android.view.ViewGroup;
 
 /**
  * An activity representing a list of Items. This activity has different
@@ -28,6 +35,7 @@ public class ItemListActivity extends ActionBarActivity implements
 	 * device.
 	 */
 	private boolean mTwoPane;
+	
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -64,6 +72,21 @@ public class ItemListActivity extends ActionBarActivity implements
 		}
 
 		// TODO: If exposing deep links into your app, handle intents here.
+		//display the up arrow if applicable
+		List<Fragment> fragments = getSupportFragmentManager().getFragments();
+		
+		if(fragments != null && fragments.size()>=1 && ((ItemListFragment)fragments.get(0)).getRoot().getParent() != null)
+			{
+			//getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+			Log.d("Action bar","it will display");
+			Log.d("Action bar","this is what the fragment's root is: "+((ItemListFragment)fragments.get(0)).getRoot().getParent().toString());
+			
+			}
+		else{
+		Log.d("Action bar","it will not be displayed");
+		getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+		//Log.d("Action bar","this is what the fragment's root is: "+((ItemListFragment)fragments.get(0)).getRoot().getParent().toString());
+		}
 	}
 	
 	
@@ -105,4 +128,32 @@ public class ItemListActivity extends ActionBarActivity implements
 			
 		}
 	}
+	
+	/*@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		int id = item.getItemId();
+		if (id == android.R.id.home) {
+			// This ID represents the Home or Up button. In the case of this
+			// activity, the Up button is shown. Use NavUtils to allow users
+			// to navigate up one level in the application structure. For
+			// more details, see the Navigation pattern on Android Design:
+			//
+			// http://developer.android.com/design/patterns/navigation.html#up-vs-back
+			//
+			
+			Intent intent = new Intent(this,ItemListActivity.class);
+			Log.d("Action bar","about to test");
+			if(getSupportFragmentManager().getBackStackEntryCount()>=1 && ((ItemListFragment)getSupportFragmentManager().getFragments().get(0)).getRoot()!=null && ((ItemListFragment)getSupportFragmentManager().getFragments().get(0)).getRoot().getParent()!=null){
+				Log.d("Action bar","putting in the hash");
+				intent.putExtra(ItemListFragment.ARG_ITEM_HASH, ((ItemListFragment)getSupportFragmentManager().getFragments().get(0)).getRoot().getParent().hashCode());
+				
+			}
+			else
+				Log.d("Action bar","it returned false, nothing special to navegate to");
+			NavUtils.navigateUpTo(this,intent);
+			return true;
+		}
+		return super.onOptionsItemSelected(item);
+	}
+	*/
 }

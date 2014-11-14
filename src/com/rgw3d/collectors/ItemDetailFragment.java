@@ -71,7 +71,8 @@ public class ItemDetailFragment extends Fragment {
 	 * @return correct CollectionItem specified by hashcode
 	 */
 	private CollectionItem findChildObject(int hashCode, CollectionItem root) {
-		
+		if(root.hashCode() == hashCode)
+			return root;
 		for(CollectionItem x: root.getChildren()){
 			if(x.hashCode() == hashCode)
 				return x;
