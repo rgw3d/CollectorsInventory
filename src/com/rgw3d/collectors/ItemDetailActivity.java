@@ -1,5 +1,7 @@
 package com.rgw3d.collectors;
 
+import com.rgw3d.collectors.dummy.DummyContent;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
@@ -17,7 +19,7 @@ import android.view.MenuItem;
  */
 public class ItemDetailActivity extends ActionBarActivity {
 
-	public ItemDetailFragment createdFragment;
+	private CollectionItem Root;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -36,15 +38,16 @@ public class ItemDetailActivity extends ActionBarActivity {
 		//
 		// http://developer.android.com/guide/components/fragments.html
 		//
-		if (savedInstanceState == null) {
+		if (savedInstanceState == null &&getIntent()!= null && getIntent().hasExtra(ItemDetailFragment.ARG_ITEM_HASH) ) {
 			// Create the detail fragment and add it to the activity
 			// using a fragment transaction.
 			Bundle arguments = new Bundle();
-			arguments.putInt(ItemDetailFragment.ARG_ITEM_HASH, getIntent()
-					.getExtras().getInt(ItemDetailFragment.ARG_ITEM_HASH));//getIntent() gets the bundle that was sent
-					//.getStringExtra(ItemDetailFragment.ARG_ITEM_PREFIX));
-			ItemDetailFragment fragment = new ItemDetailFragment();//new fragment created
-			createdFragment = fragment;
+			
+			arguments.putInt(ItemDetailFragment.ARG_ITEM_HASH, 
+					getIntent().getExtras()
+					.getInt(ItemDetailFragment.ARG_ITEM_HASH));
+			Root = CollectionItem.findChildObject(getIntent().getExtras().getInt(ItemDetailFragment.ARG_ITEM_HASH), DummyContent.x);
+			ItemDetailFragment fragment = new ItemDetailFragment();
 			fragment.setArguments(arguments);
 			getSupportFragmentManager().beginTransaction()
 					.add(R.id.item_detail_container, fragment).commit();
@@ -65,9 +68,9 @@ public class ItemDetailActivity extends ActionBarActivity {
 			
 			Intent intent = new Intent(this,ItemListActivity.class);
 			
-			if(createdFragment.getmItem()!=null && createdFragment.getmItem().getParent()!=null){
-				Log.d("Action bar","putting in the hash");
-				intent.putExtra(ItemListFragment.ARG_ITEM_HASH, createdFragment.getmItem().getParent().hashCode());
+			if(Root!=null){
+				Log.d("Action bar","From detail to list");
+				intent.putExtra(ItemListFragment.ARG_ITEM_HASH, Root.hashCode());
 				
 			}
 			else
