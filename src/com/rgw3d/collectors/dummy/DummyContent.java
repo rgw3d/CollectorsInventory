@@ -17,7 +17,7 @@ public class DummyContent {
 	
 	public static CollectionItem x = new CollectionItem();
 	static{
-		x.setName("List 1");
+		x.setName("Top Level");
 		x.setIsItem(false);
 		x.initializeChildren();
 		

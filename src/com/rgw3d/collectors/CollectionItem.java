@@ -175,7 +175,7 @@ public class CollectionItem {
 	 * @return correct CollectionItem specified by hashcode
 	 */
 	public static CollectionItem findChildObject(int hashCode, CollectionItem root) {
-		
+		Log.d("Find Child Objects","Root Name: "+root.toString());
 		if(root.hashCode() == hashCode)
 			return root;
 		for(CollectionItem x: root.getChildren()){

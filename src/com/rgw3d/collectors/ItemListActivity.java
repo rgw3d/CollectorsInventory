@@ -51,6 +51,8 @@ public class ItemListActivity extends ActionBarActivity implements
 					.getInt(ItemListFragment.ARG_ITEM_HASH));
 				
 				Root = CollectionItem.findChildObject(getIntent().getExtras().getInt(ItemListFragment.ARG_ITEM_HASH), DummyContent.x);
+				if(Root == DummyContent.x)
+					Root = null;
 			}
 			
 			ItemListFragment fragment = new ItemListFragment();
@@ -76,8 +78,8 @@ public class ItemListActivity extends ActionBarActivity implements
 		}
 
 		// TODO: If exposing deep links into your app, handle intents here.
-		//display the up arrow if applicable
 		
+		//display the up arrow if applicable
 		if(Root!= null){
 			getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 			Log.d("Action bar","it will display");

@@ -101,7 +101,7 @@ public class ItemListFragment extends ListFragment {
 		setListAdapter(new ArrayAdapter<CollectionItem>(getActivity(),
 				android.R.layout.simple_list_item_activated_1,
 				android.R.id.text1, Root.getChildren()));
-		
+		Log.d("Starting List Fragment","Created!");
 		
 	}
 	
