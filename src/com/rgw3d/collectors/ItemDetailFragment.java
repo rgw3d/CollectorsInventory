@@ -52,7 +52,7 @@ public class ItemDetailFragment extends Fragment {
 			// Load the dummy content specified by the fragment
 			// arguments. In a real-world scenario, use a Loader
 			// to load content from a content provider.
-			mItem = findChildObject(getArguments().getInt(ARG_ITEM_HASH),DummyContent.x);
+			mItem = CollectionItem.findChildObject(getArguments().getInt(ARG_ITEM_HASH),DummyContent.x);
 			Log.d("Debug",mItem.toString());
 			if(mItem == null){
 				Log.e("Error in ItemDetailFragment", "mItem is null.  Hashcode sent was wrong");
@@ -62,29 +62,7 @@ public class ItemDetailFragment extends Fragment {
 		}
 	}
 
-	/**
-	 * This method is designed to recursivly search through all of
-	 * the CollectionItem items and find the correct item that was sent over
-	 * via the hashcode parameter
-	 * @param hashCode - specifies what object to choose
-	 * @param root - this specifies what CollectionItem object is the root
-	 * @return correct CollectionItem specified by hashcode
-	 */
-	private CollectionItem findChildObject(int hashCode, CollectionItem root) {
-		if(root.hashCode() == hashCode)
-			return root;
-		for(CollectionItem x: root.getChildren()){
-			if(x.hashCode() == hashCode)
-				return x;
-			else if(!x.isItem()){
-				CollectionItem tmp = findChildObject(hashCode,x);
-				if(tmp!=null)
-					return tmp;
-			}
-		}
-		return null;
-		
-	}
+	
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,

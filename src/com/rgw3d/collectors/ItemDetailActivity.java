@@ -64,14 +64,14 @@ public class ItemDetailActivity extends ActionBarActivity {
 			//
 			
 			Intent intent = new Intent(this,ItemListActivity.class);
-			Log.d("Debug","about to test");
+			
 			if(createdFragment.getmItem()!=null && createdFragment.getmItem().getParent()!=null){
-				Log.d("Debug","putting in the hash");
+				Log.d("Action bar","putting in the hash");
 				intent.putExtra(ItemListFragment.ARG_ITEM_HASH, createdFragment.getmItem().getParent().hashCode());
 				
 			}
 			else
-				Log.d("Debug","it returned false");
+				Log.d("Action bar","it returned false, supposedly nothing to navegate too..");
 			NavUtils.navigateUpTo(this,intent);
 			return true;
 		}

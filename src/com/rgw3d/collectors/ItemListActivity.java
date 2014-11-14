@@ -1,16 +1,14 @@
 package com.rgw3d.collectors;
 
-import java.util.ArrayList;
-import java.util.List;
+
+import com.rgw3d.collectors.dummy.DummyContent;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.NavUtils;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.MenuItem;
-import android.view.ViewGroup;
 
 /**
  * An activity representing a list of Items. This activity has different
@@ -36,6 +34,8 @@ public class ItemListActivity extends ActionBarActivity implements
 	 */
 	private boolean mTwoPane;
 	
+	private CollectionItem Root = null;
+	
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -44,17 +44,21 @@ public class ItemListActivity extends ActionBarActivity implements
 		
 		
 			Bundle arguments = new Bundle();
+			
 			if(getIntent()!= null && getIntent().hasExtra(ItemListFragment.ARG_ITEM_HASH)){
-			arguments.putInt(ItemListFragment.ARG_ITEM_HASH, 
+				arguments.putInt(ItemListFragment.ARG_ITEM_HASH, 
 					getIntent().getExtras()
 					.getInt(ItemListFragment.ARG_ITEM_HASH));
+				
+				Root = CollectionItem.findChildObject(getIntent().getExtras().getInt(ItemListFragment.ARG_ITEM_HASH), DummyContent.x);
 			}
+			
 			ItemListFragment fragment = new ItemListFragment();
 			fragment.setArguments(arguments);
 			getSupportFragmentManager().beginTransaction()
 				.add(R.id.item_list_container, fragment).commit();
 		
-		
+			
 
 		
 		
@@ -73,20 +77,17 @@ public class ItemListActivity extends ActionBarActivity implements
 
 		// TODO: If exposing deep links into your app, handle intents here.
 		//display the up arrow if applicable
-		List<Fragment> fragments = getSupportFragmentManager().getFragments();
 		
-		if(fragments != null && fragments.size()>=1 && ((ItemListFragment)fragments.get(0)).getRoot().getParent() != null)
-			{
-			//getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+		if(Root!= null){
+			getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 			Log.d("Action bar","it will display");
-			Log.d("Action bar","this is what the fragment's root is: "+((ItemListFragment)fragments.get(0)).getRoot().getParent().toString());
-			
-			}
-		else{
-		Log.d("Action bar","it will not be displayed");
-		getSupportActionBar().setDisplayHomeAsUpEnabled(false);
-		//Log.d("Action bar","this is what the fragment's root is: "+((ItemListFragment)fragments.get(0)).getRoot().getParent().toString());
+			Log.d("Action bar","Name of root object: "+Root.toString());
 		}
+		else{
+			getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+			Log.d("Action bar","Will not be displayed");
+		}
+			
 	}
 	
 	
@@ -129,7 +130,7 @@ public class ItemListActivity extends ActionBarActivity implements
 		}
 	}
 	
-	/*@Override
+	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		int id = item.getItemId();
 		if (id == android.R.id.home) {
@@ -143,17 +144,18 @@ public class ItemListActivity extends ActionBarActivity implements
 			
 			Intent intent = new Intent(this,ItemListActivity.class);
 			Log.d("Action bar","about to test");
-			if(getSupportFragmentManager().getBackStackEntryCount()>=1 && ((ItemListFragment)getSupportFragmentManager().getFragments().get(0)).getRoot()!=null && ((ItemListFragment)getSupportFragmentManager().getFragments().get(0)).getRoot().getParent()!=null){
+			if(Root!= null){
 				Log.d("Action bar","putting in the hash");
-				intent.putExtra(ItemListFragment.ARG_ITEM_HASH, ((ItemListFragment)getSupportFragmentManager().getFragments().get(0)).getRoot().getParent().hashCode());
-				
+				intent.putExtra(ItemListFragment.ARG_ITEM_HASH, Root.hashCode());
+				NavUtils.navigateUpTo(this,intent);
+				return true;
 			}
-			else
+			else{
 				Log.d("Action bar","it returned false, nothing special to navegate to");
-			NavUtils.navigateUpTo(this,intent);
-			return true;
+				return false;
+			}
 		}
 		return super.onOptionsItemSelected(item);
 	}
-	*/
+	
 }

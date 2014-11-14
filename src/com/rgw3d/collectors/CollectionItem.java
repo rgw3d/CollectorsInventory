@@ -166,7 +166,29 @@ public class CollectionItem {
 	}
 
 	
-
+	/**
+	 * This method is designed to recursivly search through all of
+	 * the CollectionItem items and find the correct item that was sent over
+	 * via the hashcode parameter
+	 * @param hashCode - specifies what object to choose
+	 * @param root - this specifies what CollectionItem object is the root
+	 * @return correct CollectionItem specified by hashcode
+	 */
+	public static CollectionItem findChildObject(int hashCode, CollectionItem root) {
+		if(root.hashCode() == hashCode)
+			return root;
+		for(CollectionItem x: root.getChildren()){
+			if(x.hashCode() == hashCode)
+				return x;
+			else if(!x.isItem()){
+				CollectionItem tmp = findChildObject(hashCode,x);
+				if(tmp!=null)
+					return tmp;
+			}
+		}
+		return null;
+		
+	}
 	
 	
 	
