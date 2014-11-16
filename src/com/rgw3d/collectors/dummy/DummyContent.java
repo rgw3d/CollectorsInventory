@@ -68,9 +68,29 @@ public class DummyContent {
 				baby2.addNewFieldAndDescript("Field 1", "A description of this field");
 				baby2.addDescription("Field 1", "WOW WOW WOW ");
 				baby2.addNewFieldAndDescript("Field 2", "The description 2");
+				
+				CollectionItem baby3 = new CollectionItem(child4,null,false,"Sub List 1",null);
+				baby3.initializeChildren();
+					
+					CollectionItem babyChild1 = new CollectionItem(baby3,null,true,"Sub Sub Item 1",null);
+					babyChild1.initializeDescription();
+					babyChild1.addNewFieldAndDescript("Field 1", "A description of this field");
+					babyChild1.addDescription("Field 1", "WOW WOW WOW ");
+					babyChild1.addNewFieldAndDescript("Field 2", "The description 2");
+					
+					CollectionItem babyChild2 = new CollectionItem(baby3,null,true,"Sub Sub Item 2",null);
+					babyChild2.initializeDescription();
+					babyChild2.addNewFieldAndDescript("Field 1", "A description of this field");
+					babyChild2.addDescription("Field 1", "WOW WOW WOW ");
+					babyChild2.addNewFieldAndDescript("Field 2", "The description 2");
+				
+				baby3.addChildren(babyChild1);
+				baby3.addChildren(babyChild2);
+					
 			
 			child4.addChildren(baby1);
 			child4.addChildren(baby2);
+			child4.addChildren(baby3);
 		
 		x.addChildren(child1);
 		x.addChildren(child2);
