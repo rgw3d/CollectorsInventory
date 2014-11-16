@@ -105,7 +105,6 @@ public class ItemListFragment extends ListFragment {
 	@Override
 	public void onViewCreated(View view, Bundle savedInstanceState) {
 		super.onViewCreated(view, savedInstanceState);
-		Log.d("Starting List Fragment","is on view even started?");
 		// Restore the previously serialized activated item position.
 		if (savedInstanceState != null
 				&& savedInstanceState.containsKey(STATE_ACTIVATED_POSITION)) {
@@ -126,7 +125,6 @@ public class ItemListFragment extends ListFragment {
 		}
 
 		mCallbacks = (Callbacks) activity;
-		Log.d("Starting List Fragment","Attached!");
 	}
 
 	@Override

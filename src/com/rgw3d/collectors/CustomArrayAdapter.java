@@ -13,7 +13,7 @@ import android.widget.TextView;
 /**
  * TODO: document your custom view class.
  */
-public class CustomArrayAdapter extends ArrayAdapter<String> {
+public class CustomArrayAdapter extends ArrayAdapter<String>{
 	
 	// declaring our ArrayList of items
 		private ArrayList<String> objects;

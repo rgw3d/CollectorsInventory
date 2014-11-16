@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+import android.util.Log;
+
 
 
 
@@ -195,6 +197,22 @@ public class CollectionItem {
 			return match.getParent();
 		else
 			return null;
+	}
+	
+	public ArrayList<String> getHTMLDescription(){
+		ArrayList<String> stringDescript = new ArrayList<String>();
+		for(String key: Description.keySet().toArray(new String[0])){//add each field
+			Log.d("Detail Fragment","The key: "+key);
+			String paragraphs = "";
+			for(String descript: Description.get(key)){//add each description under the field
+				Log.d("Detail Fragment","The descript: "+descript);
+				
+				paragraphs+="<small>"+descript+"</small> <br />";
+			}
+			paragraphs = paragraphs.substring(0, paragraphs.length()-7);
+			stringDescript.add("<b>"+key+"</b> <br />" + paragraphs);
+		}
+		return stringDescript;
 	}
 	
 	
