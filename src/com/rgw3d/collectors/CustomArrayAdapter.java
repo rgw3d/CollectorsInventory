@@ -6,9 +6,11 @@ import android.content.Context;
 import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
+import android.widget.Toast;
 
 /**
  * TODO: document your custom view class.
@@ -17,6 +19,7 @@ public class CustomArrayAdapter extends ArrayAdapter<String>{
 	
 	// declaring our ArrayList of items
 		private ArrayList<String> objects;
+		private Context context;
 
 		/* here we must override the constructor for ArrayAdapter
 		* the only variable we care about now is ArrayList<Item> objects,
@@ -25,6 +28,7 @@ public class CustomArrayAdapter extends ArrayAdapter<String>{
 		public CustomArrayAdapter(Context context, int textViewResourceId, ArrayList<String> objects) {
 			super(context, textViewResourceId, objects);
 			this.objects = objects;
+			this.context = context;
 		}
 
 		/*
@@ -63,6 +67,17 @@ public class CustomArrayAdapter extends ArrayAdapter<String>{
 				// if not, assign some text!
 				if (tv != null){
 					tv.setText(Html.fromHtml(i));
+					 tv.setOnClickListener(new OnClickListener(){
+
+			                @Override 
+			                public void onClick(View v) {
+			                    // Do the stuff you want for the case when the row TextView is clicked
+			                    // you may want to set as the tag for the TextView the position paremeter of the `getView` method and then retrieve it here
+			                    //Integer realPosition = (Integer) v.getTag();
+			                    // using realPosition , now you know the row where this TextView was clicked
+			                	Toast.makeText(context, "Item "  + " was clicked", Toast.LENGTH_SHORT).show();
+			                }
+					 });
 				}
 			}
 
@@ -70,5 +85,5 @@ public class CustomArrayAdapter extends ArrayAdapter<String>{
 			return v;
 
 		}
-
 }
+

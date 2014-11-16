@@ -67,7 +67,7 @@ public class ItemDetailFragment extends ListFragment implements OnItemClickListe
 		}
 	}
 	
-	@Override
+	/*@Override
 	public void onActivityCreated(Bundle savedState) {
 	    super.onActivityCreated(savedState);
     	Log.d("Long Click","Okay so it should be creating the listener here");
@@ -92,6 +92,7 @@ public class ItemDetailFragment extends ListFragment implements OnItemClickListe
 		super.onListItemClick(listView, view, position, id);
 		Toast.makeText(getActivity(), "Item asldkfjsdf " + position + " was clicked", Toast.LENGTH_SHORT).show();
 	}
+	*/
 }
 
 	
