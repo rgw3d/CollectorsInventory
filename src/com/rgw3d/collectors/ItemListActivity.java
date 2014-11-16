@@ -34,7 +34,7 @@ public class ItemListActivity extends ActionBarActivity implements
 	 */
 	private boolean mTwoPane;
 	
-	private CollectionItem Root = null;
+	private CollectionItem parentItem = null;
 	
 	
 	@Override
@@ -50,7 +50,7 @@ public class ItemListActivity extends ActionBarActivity implements
 					getIntent().getExtras()
 					.getInt(ItemListFragment.ARG_ITEM_HASH));
 				
-				Root = CollectionItem.findChildObject(getIntent().getExtras().getInt(ItemListFragment.ARG_ITEM_HASH), DummyContent.x);
+				parentItem = CollectionItem.findParentObject(getIntent().getExtras().getInt(ItemListFragment.ARG_ITEM_HASH), DummyContent.x);
 				
 			}
 			
@@ -81,10 +81,10 @@ public class ItemListActivity extends ActionBarActivity implements
 		
 		//display the up arrow if applicable
 		Log.d("Action bar","About to test");
-		if(Root!= null){
+		if(parentItem!= null){
 			getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 			Log.d("Action bar","it will display");
-			Log.d("Action bar","Name of root object: "+Root.toString());
+			Log.d("Action bar","Name of root object: "+parentItem.toString());
 		}
 		else{
 			getSupportActionBar().setDisplayHomeAsUpEnabled(false);
@@ -147,9 +147,9 @@ public class ItemListActivity extends ActionBarActivity implements
 			
 			Intent intent = new Intent(this,ItemListActivity.class);
 			Log.d("Action bar","about to test");
-			if(Root!= null){
+			if(parentItem!= null){
 				Log.d("Action bar","putting in the hash");
-				intent.putExtra(ItemListFragment.ARG_ITEM_HASH, Root.hashCode());
+				intent.putExtra(ItemListFragment.ARG_ITEM_HASH, parentItem.hashCode());
 				NavUtils.navigateUpTo(this,intent);
 				return true;
 			}

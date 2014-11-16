@@ -191,6 +191,14 @@ public class CollectionItem {
 		
 	}
 	
+	public static CollectionItem findParentObject(int hashCode, CollectionItem root){
+		CollectionItem match = findChildObject(hashCode,root);
+		if(match!=null)
+			return match.getParent();
+		else
+			return null;
+	}
+	
 	
 	
 }

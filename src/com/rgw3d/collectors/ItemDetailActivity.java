@@ -19,7 +19,7 @@ import android.view.MenuItem;
  */
 public class ItemDetailActivity extends ActionBarActivity {
 
-	private CollectionItem Root;
+	private CollectionItem parentItem;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -46,7 +46,7 @@ public class ItemDetailActivity extends ActionBarActivity {
 			arguments.putInt(ItemDetailFragment.ARG_ITEM_HASH, 
 					getIntent().getExtras()
 					.getInt(ItemDetailFragment.ARG_ITEM_HASH));
-			Root = CollectionItem.findChildObject(getIntent().getExtras().getInt(ItemDetailFragment.ARG_ITEM_HASH), DummyContent.x);
+			parentItem = CollectionItem.findParentObject(getIntent().getExtras().getInt(ItemDetailFragment.ARG_ITEM_HASH), DummyContent.x);
 			ItemDetailFragment fragment = new ItemDetailFragment();
 			fragment.setArguments(arguments);
 			getSupportFragmentManager().beginTransaction()
@@ -68,9 +68,9 @@ public class ItemDetailActivity extends ActionBarActivity {
 			
 			Intent intent = new Intent(this,ItemListActivity.class);
 			
-			if(Root!=null){
+			if(parentItem!=null){
 				Log.d("Action bar","From detail to list");
-				intent.putExtra(ItemListFragment.ARG_ITEM_HASH, Root.hashCode());
+				intent.putExtra(ItemListFragment.ARG_ITEM_HASH, parentItem.hashCode());
 				
 			}
 			else

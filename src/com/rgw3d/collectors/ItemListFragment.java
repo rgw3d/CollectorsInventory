@@ -31,10 +31,6 @@ public class ItemListFragment extends ListFragment {
 	
 	public CollectionItem Root;
 	
-	public CollectionItem getRoot(){
-		return Root;
-	}
-	
 	
 	/**
 	 * The fragment's current callback object, which is notified of list item
@@ -109,13 +105,14 @@ public class ItemListFragment extends ListFragment {
 	@Override
 	public void onViewCreated(View view, Bundle savedInstanceState) {
 		super.onViewCreated(view, savedInstanceState);
-
+		Log.d("Starting List Fragment","is on view even started?");
 		// Restore the previously serialized activated item position.
 		if (savedInstanceState != null
 				&& savedInstanceState.containsKey(STATE_ACTIVATED_POSITION)) {
 			setActivatedPosition(savedInstanceState
 					.getInt(STATE_ACTIVATED_POSITION));
 		}
+		Log.d("Starting List Fragment","On View Created!");
 	}
 
 	@Override
@@ -129,6 +126,7 @@ public class ItemListFragment extends ListFragment {
 		}
 
 		mCallbacks = (Callbacks) activity;
+		Log.d("Starting List Fragment","Attached!");
 	}
 
 	@Override
