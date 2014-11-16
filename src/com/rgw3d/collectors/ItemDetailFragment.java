@@ -57,10 +57,12 @@ public class ItemDetailFragment extends ListFragment implements OnItemClickListe
 			
 			//adapter = new CustomArrayAdapter(getActivity(),
 			 //       android.R.layout.simple_list_item_1, root.getHTMLDescription());
-			adapter = new CustomArrayAdapter(getActivity(),
-			       android.R.layout.simple_list_item_1, root.getHTMLDescription());
 			
-			setListAdapter(adapter);
+			setListAdapter(new ArrayAdapter<String>(getActivity(),
+					android.R.layout.simple_list_item_activated_1,
+					android.R.id.text1,root.getHTMLDescription()));
+			
+			//setListAdapter(adapter);
 		}
 	}
 	
@@ -82,6 +84,12 @@ public class ItemDetailFragment extends ListFragment implements OnItemClickListe
 		//super.onListItemClick(arg0, v, position, id);
 		Toast.makeText(getActivity(), "Item " + position + " was clicked", Toast.LENGTH_SHORT).show();
 		Log.d("Long Click", "There was a click");
+	}
+	
+	public void onListItemClick(ListView listView, View view, int position,
+			long id){
+		super.onListItemClick(listView, view, position, id);
+		Toast.makeText(getActivity(), "Item asldkfjsdf " + position + " was clicked", Toast.LENGTH_SHORT).show();
 	}
 }
 
