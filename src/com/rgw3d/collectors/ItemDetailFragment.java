@@ -55,14 +55,15 @@ public class ItemDetailFragment extends ListFragment implements OnItemClickListe
 				Log.e("Error in ItemDetailFragment", "mItem is null.  Hashcode sent was wrong");
 			}
 			
-			//adapter = new CustomArrayAdapter(getActivity(),
-			 //       android.R.layout.simple_list_item_1, root.getHTMLDescription());
+			adapter = new CustomArrayAdapter(getActivity(),
+			        android.R.layout.simple_list_item_1, root.getHTMLDescription());
+			setListAdapter(adapter);
 			
-			setListAdapter(new ArrayAdapter<String>(getActivity(),
+			/*setListAdapter(new ArrayAdapter<String>(getActivity(),
 					android.R.layout.simple_list_item_activated_1,
 					android.R.id.text1,root.getHTMLDescription()));
+			*/
 			
-			//setListAdapter(adapter);
 		}
 	}
 	
