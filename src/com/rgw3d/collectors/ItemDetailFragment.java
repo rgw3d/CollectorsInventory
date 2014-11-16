@@ -9,7 +9,13 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
+import android.widget.AdapterView.OnItemLongClickListener;
+import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.Toast;
+import java.util.*;
 
 
 /**
@@ -17,7 +23,7 @@ import android.widget.ListView;
  * contained in a {@link ItemListActivity} in two-pane mode (on tablets) or a
  * {@link ItemDetailActivity} on handsets.
  */
-public class ItemDetailFragment extends ListFragment {
+public class ItemDetailFragment extends ListFragment implements OnItemClickListener, OnItemLongClickListener {
 	/**
 	 * The fragment argument representing the item ID that this fragment
 	 * represents.
@@ -49,15 +55,60 @@ public class ItemDetailFragment extends ListFragment {
 				Log.e("Error in ItemDetailFragment", "mItem is null.  Hashcode sent was wrong");
 			}
 			
+			//adapter = new CustomArrayAdapter(getActivity(),
+			 //       android.R.layout.simple_list_item_1, root.getHTMLDescription());
 			adapter = new CustomArrayAdapter(getActivity(),
-			        android.R.layout.simple_list_item_1, root.getHTMLDescription());
+			       android.R.layout.simple_list_item_1, root.getHTMLDescription());
 			
 			setListAdapter(adapter);
 		}
 	}
+	
+	@Override
+	public void onActivityCreated(Bundle savedState) {
+	    super.onActivityCreated(savedState);
+    	Log.d("Long Click","Okay so it should be creating the listener here");
+    	getListView().setOnItemClickListener(this);
+	    getListView().setOnItemLongClickListener(this);
+	}
+	
+	public boolean onItemLongClick(AdapterView<?> arg0, View v, int position, long id) {
+		Log.d("Long click","Wow it actually worked");
+        
+        return true;
+    }
+	
+	public void onItemClick(AdapterView<?> arg0, View v, int position, long id) {
+		//super.onListItemClick(arg0, v, position, id);
+		Toast.makeText(getActivity(), "Item " + position + " was clicked", Toast.LENGTH_SHORT).show();
+		Log.d("Long Click", "There was a click");
+	}
+}
 
 	
 /*
+new OnItemLongClickListener() {
+
+	        public boolean onItemLongClick(AdapterView<?> arg0, View v,
+	                int position, long id) {
+	            
+	            return true;
+	        }
+	    }
+
+
+
+ * 
+ * 
+ * 
+ * 
+ * 
+ * 
+ * 
+ * 
+ * 
+ * 
+ * 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
@@ -78,4 +129,4 @@ public class ItemDetailFragment extends ListFragment {
 	*/
 	
 	
-}
+

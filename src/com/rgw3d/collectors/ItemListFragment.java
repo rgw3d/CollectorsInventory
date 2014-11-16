@@ -143,13 +143,6 @@ public class ItemListFragment extends ListFragment {
 		// Notify the active callbacks interface (the activity, if the
 		// fragment is attached to one) that an item has been selected.
 		
-		
-		//have it look at the current item on display, check its children and get their get(position) and from there use their id.  
-		Log.d("Item Selection Bug", ""+Root.getChildren().size());
-		for(CollectionItem x: Root.getChildren()){
-			Log.d("Item Selection Bug", x.toString());
-		}
-		
 		mCallbacks.onItemSelected(Root.getChildren(position).isItem(),Root.getChildren(position).hashCode());//this calls the method from the Activity class above it
 		//DummyContent.ITEMS.get(position).id
 	}
