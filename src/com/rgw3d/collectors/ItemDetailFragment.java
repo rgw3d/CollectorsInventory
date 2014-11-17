@@ -3,19 +3,8 @@ package com.rgw3d.collectors;
 import com.rgw3d.collectors.dummy.DummyContent;
 
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.ListFragment;
 import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
-import android.widget.AdapterView.OnItemLongClickListener;
-import android.widget.ArrayAdapter;
-import android.widget.ListView;
-import android.widget.Toast;
-import java.util.*;
 
 
 /**
@@ -23,7 +12,7 @@ import java.util.*;
  * contained in a {@link ItemListActivity} in two-pane mode (on tablets) or a
  * {@link ItemDetailActivity} on handsets.
  */
-public class ItemDetailFragment extends ListFragment implements OnItemClickListener, OnItemLongClickListener {
+public class ItemDetailFragment extends ListFragment {
 	/**
 	 * The fragment argument representing the item ID that this fragment
 	 * represents.
@@ -108,16 +97,6 @@ new OnItemLongClickListener() {
 
 
 
- * 
- * 
- * 
- * 
- * 
- * 
- * 
- * 
- * 
- * 
  * 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
