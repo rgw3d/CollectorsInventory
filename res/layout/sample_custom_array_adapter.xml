@@ -11,13 +11,12 @@
     <TextView
 		 	    android:id="@+id/text_view_title"
 		 	    android:textSize = "20sp"
-		 	    android:padding = "10sp"
+		 	    android:paddingLeft = "2sp"
 			    android:layout_width ="wrap_content"
 		       	android:layout_height = "wrap_content"/>
    <TextView
 		 	    android:id="@+id/text_view_description"
 		 	    android:textSize = "15sp"
-		 	    android:padding = "10sp"
 		 	    android:paddingLeft="5sp"
 			    android:layout_width ="wrap_content"
 		       	android:layout_height = "wrap_content"

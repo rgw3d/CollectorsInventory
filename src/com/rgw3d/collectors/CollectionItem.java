@@ -215,6 +215,10 @@ public class CollectionItem {
 		return stringDescript;
 	}
 	
+	public String getTitle(int pos){
+		return 
+	}
+	
 	
 	
 	
