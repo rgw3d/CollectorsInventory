@@ -2,13 +2,16 @@ package com.rgw3d.collectors;
 
 import java.util.ArrayList;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnLongClickListener;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -75,7 +78,33 @@ public class CustomArrayAdapter extends ArrayAdapter<String>{
 			                    // you may want to set as the tag for the TextView the position paremeter of the `getView` method and then retrieve it here
 			                    //Integer realPosition = (Integer) v.getTag();
 			                    // using realPosition , now you know the row where this TextView was clicked
-			                	Toast.makeText(context, "Item "  + " was clicked", Toast.LENGTH_SHORT).show();
+			                	//Toast.makeText(context, "Item "  + " was clicked", Toast.LENGTH_SHORT).show();
+			                	TextView tv = (TextView)v;
+			                	AlertDialog.Builder alert = new AlertDialog.Builder(context);
+
+			                	alert.setTitle("Edit Field"+tv.getText());
+			                	alert.setMessage("A blank description destroyes this field");
+
+			                	// Set an EditText view to get user input 
+			                	final EditText input = new EditText(context);
+			                	input.setHint(tv.getText());
+			                	alert.setView(input);
+
+			                	alert.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+			                	public void onClick(DialogInterface dialog, int whichButton) {
+
+			                	  // Do something with value!
+			                	  }
+			                	});
+
+			                	alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+			                	  public void onClick(DialogInterface dialog, int whichButton) {
+			                	    // Canceled.
+			                	  }
+			                	});
+
+			                	alert.show();
+			                	
 			                	return true;
 			                }
 					 });
