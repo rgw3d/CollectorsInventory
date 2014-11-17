@@ -215,8 +215,25 @@ public class CollectionItem {
 		return stringDescript;
 	}
 	
-	public String getTitle(int pos){
-		return 
+	public ArrayList<ArrayList<String>> getKeyAndDescription(){
+		String key[] = Description.keySet().toArray(new String[0]);
+		Log.d("Key length","Key legnth: "+	key.length);
+		ArrayList<ArrayList<String>> resultant = new ArrayList<ArrayList<String>>();
+		for(int x = 0; x<key.length; x++){
+			ArrayList<String> tmp = new ArrayList<String>();
+			tmp.add(key[x]);
+			resultant.add(tmp);
+			resultant.get(x).add(getDescription(key[x]));
+		}
+		return resultant;
+	}
+	public String getDescription(String key){
+		ArrayList<String> x = Description.get(key);
+		String toReturn = "";
+		for(String y: x){
+			toReturn+=y+"\n";
+		}
+		return toReturn.substring(0,toReturn.length()-1);
 	}
 	
 	

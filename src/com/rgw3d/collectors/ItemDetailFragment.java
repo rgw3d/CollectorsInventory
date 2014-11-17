@@ -45,7 +45,7 @@ public class ItemDetailFragment extends ListFragment {
 			}
 			
 			adapter = new CustomArrayAdapter(getActivity(),
-			        android.R.layout.simple_list_item_1, root.getHTMLDescription());
+			        android.R.layout.simple_list_item_1, root.getKeyAndDescription());
 			setListAdapter(adapter);
 			
 			/*setListAdapter(new ArrayAdapter<String>(getActivity(),

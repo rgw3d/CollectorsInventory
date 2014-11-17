@@ -18,17 +18,17 @@ import android.widget.Toast;
 /**
  * TODO: document your custom view class.
  */
-public class CustomArrayAdapter extends ArrayAdapter<String>{
+public class CustomArrayAdapter extends ArrayAdapter<ArrayList<String>>{
 	
 	// declaring our ArrayList of items
-		private ArrayList<String> objects;
+		private ArrayList<ArrayList<String>> objects;
 		private Context context;
 
 		/* here we must override the constructor for ArrayAdapter
 		* the only variable we care about now is ArrayList<Item> objects,
 		* because it is the list of objects we want to display.
 		*/
-		public CustomArrayAdapter(Context context, int textViewResourceId, ArrayList<String> objects) {
+		public CustomArrayAdapter(Context context, int textViewResourceId, ArrayList<ArrayList<String>> objects) {
 			super(context, textViewResourceId, objects);
 			this.objects = objects;
 			this.context = context;
@@ -57,9 +57,10 @@ public class CustomArrayAdapter extends ArrayAdapter<String>{
 			 * 
 			 * Therefore, i refers to the current Item object.
 			 */
-			String i = objects.get(position);
+			String i = objects.get(position).get(0);
+			String o = objects.get(position).get(1);
 
-			if (i != null) {
+			if (i != null && o!= null) {
 
 				// This is how you obtain a reference to the TextViews.
 				// These TextViews are created in the XML files we defined.
@@ -68,9 +69,20 @@ public class CustomArrayAdapter extends ArrayAdapter<String>{
 				// check to see if each individual textview is null.
 				// if not, assign some text!
 				if (tv != null){
-					tv.setText(Html.fromHtml(i));
-					 tv.setOnLongClickListener(new LongClickListener());
+					tv.setText(i);
+					tv.setTag("Title");
+					tv.setOnLongClickListener(new LongClickListener());
 				}
+				
+				
+				TextView tv2 = (TextView) v.findViewById(R.id.text_view_description);
+				
+				if(tv2 != null){
+					tv2.setText(o);
+					tv2.setTag("Description");
+					tv2.setOnLongClickListener(new LongClickListener());
+				}
+				
 			}
 
 			// the view must be returned to our activity
@@ -91,8 +103,15 @@ public class CustomArrayAdapter extends ArrayAdapter<String>{
             	TextView tv = (TextView)v;
             	AlertDialog.Builder alert = new AlertDialog.Builder(context);
 
-            	alert.setTitle("Edit Field"+tv.getText());
+            	if(tv.getTag().equals("Title")){
+            		alert.setTitle("Edit Field: \n"+tv.getText());
+            	}
+            	else if(tv.getTag().equals("Description")){
+            		alert.setTitle("Edit Description: \n" + tv.getText());
+            	}
+            	
             	alert.setMessage("A blank description destroyes this field");
+            	
 
             	// Set an EditText view to get user input 
             	final EditText input = new EditText(context);
