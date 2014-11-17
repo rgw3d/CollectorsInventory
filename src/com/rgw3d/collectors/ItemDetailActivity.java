@@ -20,6 +20,10 @@ import android.view.MenuItem;
 public class ItemDetailActivity extends ActionBarActivity {
 
 	private CollectionItem parentItem;
+	private CollectionItem root;
+	public CollectionItem getRoot(){
+		return root;
+	}
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -47,6 +51,7 @@ public class ItemDetailActivity extends ActionBarActivity {
 					getIntent().getExtras()
 					.getInt(ItemDetailFragment.ARG_ITEM_HASH));
 			parentItem = CollectionItem.findParentObject(getIntent().getExtras().getInt(ItemDetailFragment.ARG_ITEM_HASH), DummyContent.x);
+			root = CollectionItem.findChildObject(getIntent().getExtras().getInt(ItemDetailFragment.ARG_ITEM_HASH), DummyContent.x);
 			ItemDetailFragment fragment = new ItemDetailFragment();
 			fragment.setArguments(arguments);
 			getSupportFragmentManager().beginTransaction()

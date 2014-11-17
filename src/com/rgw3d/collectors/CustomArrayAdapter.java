@@ -1,6 +1,7 @@
 package com.rgw3d.collectors;
 
 import java.util.ArrayList;
+import java.util.Collection;
 
 import android.app.AlertDialog;
 import android.content.Context;
@@ -23,6 +24,7 @@ public class CustomArrayAdapter extends ArrayAdapter<ArrayList<String>>{
 	// declaring our ArrayList of items
 		private ArrayList<ArrayList<String>> objects;
 		private Context context;
+		private CollectionItem root;
 
 		/* here we must override the constructor for ArrayAdapter
 		* the only variable we care about now is ArrayList<Item> objects,
@@ -32,6 +34,7 @@ public class CustomArrayAdapter extends ArrayAdapter<ArrayList<String>>{
 			super(context, textViewResourceId, objects);
 			this.objects = objects;
 			this.context = context;
+			this.root = ((ItemDetailActivity)context).getRoot();
 		}
 
 		/*
@@ -70,8 +73,7 @@ public class CustomArrayAdapter extends ArrayAdapter<ArrayList<String>>{
 				// if not, assign some text!
 				if (tv != null){
 					tv.setText(i);
-					tv.setTag("Title");
-					tv.setOnLongClickListener(new LongClickListener());
+					tv.setOnLongClickListener(new LongClickListener(position,0));
 				}
 				
 				
@@ -79,8 +81,7 @@ public class CustomArrayAdapter extends ArrayAdapter<ArrayList<String>>{
 				
 				if(tv2 != null){
 					tv2.setText(o);
-					tv2.setTag("Description");
-					tv2.setOnLongClickListener(new LongClickListener());
+					tv2.setOnLongClickListener(new LongClickListener(position,1));
 				}
 				
 			}
@@ -91,6 +92,16 @@ public class CustomArrayAdapter extends ArrayAdapter<ArrayList<String>>{
 		}
 		
 		public class LongClickListener implements View.OnLongClickListener{
+			
+			public int pos;
+			public int isDescription;
+			//public CustomArrayAdapter context;
+			
+			public LongClickListener(int pos, int isDescription){
+				this.pos = pos;
+				this.isDescription = isDescription;
+				//this.context = context;
+			}
 
 			@Override
 			public boolean onLongClick(View v) {
@@ -103,10 +114,11 @@ public class CustomArrayAdapter extends ArrayAdapter<ArrayList<String>>{
             	TextView tv = (TextView)v;
             	AlertDialog.Builder alert = new AlertDialog.Builder(context);
 
-            	if(tv.getTag().equals("Title")){
+            	if(isDescription ==0){
             		alert.setTitle("Edit Field: \n"+tv.getText());
+            		
             	}
-            	else if(tv.getTag().equals("Description")){
+            	else if(isDescription ==1){
             		alert.setTitle("Edit Description: \n" + tv.getText());
             	}
             	
@@ -120,8 +132,36 @@ public class CustomArrayAdapter extends ArrayAdapter<ArrayList<String>>{
 
             	alert.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
             	public void onClick(DialogInterface dialog, int whichButton) {
-
-            	  // Do something with value!
+            		if(input.getText().toString().equals("")){
+            			if(objects.size() >1)//only if there is more than one oject it will be removed
+            				remove(objects.get(pos));
+            		}
+            		else{
+	            		if(isDescription ==0){//change the title
+	            			String toRemove = objects.get(pos).get(isDescription);
+	            			objects.get(pos).remove(toRemove);
+	            			objects.get(pos).add(0,input.getText().toString());
+	            			
+	            			root.addDescription(input.getText().toString(), objects.get(pos).get(1));//add new key and descript
+	            			root.getDescription().remove(objects.get(pos).get(0));//remove key
+	            			
+	            			
+	            			notifyDataSetChanged();
+	            		}
+	            		else if (isDescription ==1 ){
+	            			String toRemove = objects.get(pos).get(isDescription);
+	            			objects.get(pos).remove(toRemove);
+	            			objects.get(pos).add(1,input.getText().toString());
+	            			
+	            			root.addDescription(objects.get(pos).get(0),input.getText().toString());//add new key and descript
+	            			root.getDescription().remove(objects.get(pos).get(0));//remove key
+	            			
+	            			
+	            			notifyDataSetChanged();
+	            		}
+            		}
+            		
+            	  
             	  }
             	});
 
@@ -136,6 +176,30 @@ public class CustomArrayAdapter extends ArrayAdapter<ArrayList<String>>{
             	return true;
             }
 			
+		}
+		
+		@Override
+		public void add(ArrayList<String> newData) {
+		    objects.add(newData);
+		    notifyDataSetChanged();
+		}
+
+		@Override
+		public void insert(ArrayList<String> newData, int index) {
+		    objects.add(index, newData);
+		    notifyDataSetChanged();
+		}
+
+		@Override
+		public void remove(ArrayList<String> newData) {
+		    objects.remove(newData);
+		    notifyDataSetChanged();
+		}
+
+		@Override
+		public void clear() {
+		    objects.clear();
+		    notifyDataSetChanged();
 		}
 }
 

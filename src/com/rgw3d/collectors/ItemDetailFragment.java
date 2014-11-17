@@ -23,6 +23,9 @@ public class ItemDetailFragment extends ListFragment {
 	 * The CollectionItem that is specified
 	 */
 	private CollectionItem root;
+	
+	
+	
 	private CustomArrayAdapter adapter;
 
 	/**
