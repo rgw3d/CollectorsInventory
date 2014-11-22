@@ -1,7 +1,5 @@
 package com.rgw3d.collectors;
 
-import com.rgw3d.collectors.dummy.DummyContent;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
@@ -50,8 +48,8 @@ public class ItemDetailActivity extends ActionBarActivity {
 			arguments.putInt(ItemDetailFragment.ARG_ITEM_HASH, 
 					getIntent().getExtras()
 					.getInt(ItemDetailFragment.ARG_ITEM_HASH));
-			parentItem = CollectionItem.findParentObject(getIntent().getExtras().getInt(ItemDetailFragment.ARG_ITEM_HASH), DummyContent.x);
-			root = CollectionItem.findChildObject(getIntent().getExtras().getInt(ItemDetailFragment.ARG_ITEM_HASH), DummyContent.x);
+			parentItem = CollectionItem.findParentObject(getIntent().getExtras().getInt(ItemDetailFragment.ARG_ITEM_HASH), CollectionDataStorage.base);
+			root = CollectionItem.findChildObject(getIntent().getExtras().getInt(ItemDetailFragment.ARG_ITEM_HASH), CollectionDataStorage.base);
 			ItemDetailFragment fragment = new ItemDetailFragment();
 			fragment.setArguments(arguments);
 			getSupportFragmentManager().beginTransaction()

@@ -1,7 +1,5 @@
 package com.rgw3d.collectors;
 
-import com.rgw3d.collectors.dummy.DummyContent;
-
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
 import android.util.Log;
@@ -42,10 +40,11 @@ public class ItemDetailFragment extends ListFragment {
 			// Load the dummy content specified by the fragment
 			// arguments. In a real-world scenario, use a Loader
 			// to load content from a content provider.
-			root = CollectionItem.findChildObject(getArguments().getInt(ARG_ITEM_HASH),DummyContent.x);
+			root = CollectionItem.findChildObject(getArguments().getInt(ARG_ITEM_HASH),CollectionDataStorage.base);
 			if(root == null){
 				Log.e("Error in ItemDetailFragment", "mItem is null.  Hashcode sent was wrong");
 			}
+			Log.d("Orig Key Set after root is created: ", root.printDescriptionKeys());
 			
 			adapter = new CustomArrayAdapter(getActivity(),
 			        android.R.layout.simple_list_item_1, root.getKeyAndDescription());

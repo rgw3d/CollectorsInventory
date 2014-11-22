@@ -1,7 +1,6 @@
 package com.rgw3d.collectors;
 
 
-import com.rgw3d.collectors.dummy.DummyContent;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -50,7 +49,7 @@ public class ItemListActivity extends ActionBarActivity implements
 					getIntent().getExtras()
 					.getInt(ItemListFragment.ARG_ITEM_HASH));
 				
-				parentItem = CollectionItem.findParentObject(getIntent().getExtras().getInt(ItemListFragment.ARG_ITEM_HASH), DummyContent.x);
+				parentItem = CollectionItem.findParentObject(getIntent().getExtras().getInt(ItemListFragment.ARG_ITEM_HASH), CollectionDataStorage.base);
 				
 			}
 			

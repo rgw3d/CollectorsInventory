@@ -7,9 +7,6 @@ import java.util.Map;
 import android.util.Log;
 
 
-
-
-
 public class CollectionItem {
 	/*
 	 * In this class I want to be able to make objects that have 
@@ -17,13 +14,14 @@ public class CollectionItem {
 	 * information about the objects (of this type) below it.  
 	 */
 	
-	private CollectionItem Parent = null;
-	//public
-	private ArrayList<CollectionItem> Children = null;
-	private boolean IsItem = true;
+
 	private String Name = "Detail 1";
+	private boolean IsItem = true;
+	private ArrayList<CollectionItem> Children = null;
 	private Map<String, ArrayList<String>> Description = null;
-	public int Position=0;
+	private ArrayList<String> Keys = null;
+	private CollectionItem Parent = null;
+	public int Position=0;//something that might be implemented later to make sure that everything is displayed correctly
 	
 	//initialize the default values.
 	public CollectionItem(CollectionItem parent, 
@@ -64,14 +62,17 @@ public class CollectionItem {
 	}
 	public void initializeDescription(){
 		Description = new HashMap<String, ArrayList<String>>();
+		Keys = new ArrayList<String>();
 	}
 	public void addNewFieldAndDescript(String field,String dscrpt){
 		ArrayList<String> descriptions = new ArrayList<String>();
 		descriptions.add(dscrpt);
 		Description.put(field, descriptions);
+		Keys.add(field);
 	}
 	public void addNewFieldAndDescript(String field,ArrayList<String> dscrpt){
 		Description.put(field, dscrpt);
+		Keys.add(field);
 	}
 	public void addDescription(String key, String dscrpt){
 		if(Description.containsKey(key))
@@ -80,6 +81,10 @@ public class CollectionItem {
 	public void changeDescription(String key, String dscrpt,int index){
 		if(Description.containsKey(key))
 			Description.get(key).set(index, dscrpt);
+	}
+	
+	public ArrayList<String> getKeys(){
+		return Keys;
 	}
 	
 	public ArrayList<CollectionItem> getChildren(){
@@ -234,6 +239,13 @@ public class CollectionItem {
 			toReturn+=y+"\n";
 		}
 		return toReturn.substring(0,toReturn.length()-1);
+	}
+	public String printDescriptionKeys(){
+		String resultant = "";
+		for(String x: Description.keySet()){
+			resultant.concat(x+"\n");
+		}
+		return resultant;
 	}
 	
 	

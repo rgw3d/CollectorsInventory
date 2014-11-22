@@ -1,20 +1,17 @@
 package com.rgw3d.collectors;
 
 import java.util.ArrayList;
-import java.util.Collection;
 
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.text.Html;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.View.OnLongClickListener;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
 /**
  * TODO: document your custom view class.
@@ -32,9 +29,10 @@ public class CustomArrayAdapter extends ArrayAdapter<ArrayList<String>>{
 		*/
 		public CustomArrayAdapter(Context context, int textViewResourceId, ArrayList<ArrayList<String>> objects) {
 			super(context, textViewResourceId, objects);
-			this.objects = objects;
+			this.objects = objects;		
 			this.context = context;
 			this.root = ((ItemDetailActivity)context).getRoot();
+			Log.d("root in array adapter: ",root.toString());
 		}
 
 		/*
@@ -137,6 +135,7 @@ public class CustomArrayAdapter extends ArrayAdapter<ArrayList<String>>{
             				remove(objects.get(pos));
             		}
             		else{
+            			Log.d("Orig Key Set: ", root.printDescriptionKeys());
 	            		if(isDescription ==0){//change the title
 	            			String toRemove = objects.get(pos).get(isDescription);
 	            			objects.get(pos).remove(toRemove);
@@ -159,6 +158,7 @@ public class CustomArrayAdapter extends ArrayAdapter<ArrayList<String>>{
 	            			
 	            			notifyDataSetChanged();
 	            		}
+	            		Log.d("Changed Key Set: ", root.printDescriptionKeys());
             		}
             		
             	  
