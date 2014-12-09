@@ -49,7 +49,7 @@ public class ItemListActivity extends ActionBarActivity implements
 					getIntent().getExtras()
 					.getInt(ItemListFragment.ARG_ITEM_HASH));
 				
-				parentItem = CollectionItem.findParentObject(getIntent().getExtras().getInt(ItemListFragment.ARG_ITEM_HASH), CollectionDataStorage.base);
+				parentItem = CollectionItem.findParentObject(getIntent().getExtras().getInt(ItemListFragment.ARG_ITEM_HASH), CollectionDataStorage.Base);
 				
 			}
 			

@@ -40,7 +40,7 @@ public class ItemDetailFragment extends ListFragment {
 			// Load the dummy content specified by the fragment
 			// arguments. In a real-world scenario, use a Loader
 			// to load content from a content provider.
-			root = CollectionItem.findChildObject(getArguments().getInt(ARG_ITEM_HASH),CollectionDataStorage.base);
+			root = CollectionItem.findChildObject(getArguments().getInt(ARG_ITEM_HASH),CollectionDataStorage.Base);
 			if(root == null){
 				Log.e("Error in ItemDetailFragment", "mItem is null.  Hashcode sent was wrong");
 			}

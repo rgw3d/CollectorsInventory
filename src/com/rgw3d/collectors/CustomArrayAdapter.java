@@ -146,6 +146,8 @@ public class CustomArrayAdapter extends ArrayAdapter<ArrayList<String>>{
 	            			
 	            			
 	            			notifyDataSetChanged();
+	            			CollectionDataStorage.deleteData();
+	            			CollectionDataStorage.saveData();
 	            		}
 	            		else if (isDescription ==1 ){
 	            			String toRemove = objects.get(pos).get(isDescription);
@@ -157,6 +159,8 @@ public class CustomArrayAdapter extends ArrayAdapter<ArrayList<String>>{
 	            			
 	            			
 	            			notifyDataSetChanged();
+	            			CollectionDataStorage.deleteData();
+	            			CollectionDataStorage.saveData();
 	            		}
 	            		Log.d("Changed Key Set: ", root.printDescriptionKeys());
             		}

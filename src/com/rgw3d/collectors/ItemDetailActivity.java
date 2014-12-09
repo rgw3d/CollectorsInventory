@@ -48,8 +48,8 @@ public class ItemDetailActivity extends ActionBarActivity {
 			arguments.putInt(ItemDetailFragment.ARG_ITEM_HASH, 
 					getIntent().getExtras()
 					.getInt(ItemDetailFragment.ARG_ITEM_HASH));
-			parentItem = CollectionItem.findParentObject(getIntent().getExtras().getInt(ItemDetailFragment.ARG_ITEM_HASH), CollectionDataStorage.base);
-			root = CollectionItem.findChildObject(getIntent().getExtras().getInt(ItemDetailFragment.ARG_ITEM_HASH), CollectionDataStorage.base);
+			parentItem = CollectionItem.findParentObject(getIntent().getExtras().getInt(ItemDetailFragment.ARG_ITEM_HASH), CollectionDataStorage.Base);
+			root = CollectionItem.findChildObject(getIntent().getExtras().getInt(ItemDetailFragment.ARG_ITEM_HASH), CollectionDataStorage.Base);
 			ItemDetailFragment fragment = new ItemDetailFragment();
 			fragment.setArguments(arguments);
 			getSupportFragmentManager().beginTransaction()

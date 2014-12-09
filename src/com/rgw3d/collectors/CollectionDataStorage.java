@@ -2,6 +2,7 @@ package com.rgw3d.collectors;
 
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileReader;
@@ -10,29 +11,39 @@ import java.util.ArrayList;
 
 import org.xmlpull.v1.XmlSerializer;
 
-import android.app.Activity;
 import android.content.Context;
-import android.provider.DocumentsContract.Root;
 import android.util.Log;
 import android.util.Xml;
+import android.widget.Toast;
+
+import org.xmlpull.v1.XmlPullParser;
+import org.xmlpull.v1.XmlPullParserException;
+import org.xmlpull.v1.XmlPullParserFactory;
 
 public class CollectionDataStorage {
 	
-	public static String FileName = "collectionData.txt";
+	public static final String FILENAME = "collectionData.txt";
+	public static final String COLLECTION_ITEM_TAG ="CollectionItem";
+	public static final String ATTRIBUTE_TAG_NAME = "name";
+	public static final String IS_ITEM_TAG = "IsItem";
+	public static final String CHILDREN_TAG = "Children";
+	public static final String DESCRIPTION_TAG = "Description";
+	public static final String DESCRIPTION_FIELD_TAG = "DescriptionField";
 	
-	public static CollectionItem base = new CollectionItem();
+	public static CollectionItem Base = new CollectionItem();
+	
 	static{
-		readData();
-		//if(savedData()){
-			 
-		//}
-		//else{
+		//deleteData();
+		if(savedData()){
+			 loadData();
+		}
+		else{
 		
-		base.setName("Top Level");
-		base.setIsItem(false);
-		base.initializeChildren();
+		Base.setName("Top Level");
+		Base.setIsItem(false);
+		Base.initializeChildren();
 		
-			CollectionItem child1 = new CollectionItem(base,null,true,"Item 1",null);
+			CollectionItem child1 = new CollectionItem(Base,null,true,"Item 1",null);
 			child1.initializeDescription();
 			child1.addNewFieldAndDescript("Field 1", "The description1");
 			child1.addDescription("Field 1", "WOW");
@@ -44,12 +55,12 @@ public class CollectionDataStorage {
 			child1.addNewFieldAndDescript("Field 7", "The description1");
 			
 			
-			CollectionItem child2 = new CollectionItem(base,null,true,"Item 2",null);
+			CollectionItem child2 = new CollectionItem(Base,null,true,"Item 2",null);
 			child2.initializeDescription();
 			child2.addNewFieldAndDescript("Field 2", "The description2");
 			
 			
-			CollectionItem child3 = new CollectionItem(base,null,true,"Item 3",null);
+			CollectionItem child3 = new CollectionItem(Base,null,true,"Item 3",null);
 			child3.initializeDescription();
 			child3.addNewFieldAndDescript("Field 1", "The description1");
 			child3.addDescription("Field 1", "WOW");
@@ -60,7 +71,7 @@ public class CollectionDataStorage {
 			child3.addNewFieldAndDescript("Field 6", "The description1");
 			child3.addNewFieldAndDescript("Field 7", "The description1");
 			
-			CollectionItem child4 = new CollectionItem(base,null,false,"List 1",null);
+			CollectionItem child4 = new CollectionItem(Base,null,false,"List 1",null);
 			child4.initializeChildren();
 			
 				CollectionItem baby1 = new CollectionItem(child4,null,true,"Sub Item 1",null);
@@ -103,31 +114,34 @@ public class CollectionDataStorage {
 			child4.addChildren(baby2);
 			child4.addChildren(baby3);
 		
-		base.addChildren(child1);
-		base.addChildren(child2);
-		base.addChildren(child3);
-		base.addChildren(child4);
+		Base.addChildren(child1);
+		Base.addChildren(child2);
+		Base.addChildren(child3);
+		Base.addChildren(child4);
 		
-		saveData();
 		
-		///}
+		//saveData();
+		
+		
+		}
+		printData();
 		
 	}
 	
 	public static void saveData(){
 
-		    FileOutputStream fileOutputStream;       
+		          
 
 	    try {
-				fileOutputStream = CollectorsInventory.getContext().openFileOutput(FileName,Context.MODE_APPEND);
+	    		
+	    		FileOutputStream fileOutputStream  = CollectorsInventory.getContext().openFileOutput(FILENAME,Context.MODE_APPEND);
 			    XmlSerializer serializer = Xml.newSerializer();
 			    serializer.setOutput(fileOutputStream, "UTF-8");
 			    serializer.startDocument(null, Boolean.valueOf(true));
 			    serializer.setFeature("http://xmlpull.org/v1/doc/features.html#indent-output", true);
 	
-			    serializer.startTag(null, "root");
-			    addCollectionItemsTags(serializer, base.getChildren(),"CollectionItemBase");
-			    serializer.endTag(null, "root");
+			    addCollectionItemsTags(serializer, Base.getChildren(),COLLECTION_ITEM_TAG);
+			    
 			    serializer.endDocument();
 			    serializer.flush();
 			    fileOutputStream.close();
@@ -136,15 +150,13 @@ public class CollectionDataStorage {
 			e.printStackTrace();
 		}
 	}
-	
-	
 
 	public static void addCollectionItemsTags(XmlSerializer serializer, ArrayList<CollectionItem> collectionItemList, String name){
 		
 		for(CollectionItem i: collectionItemList){
 	    	try {
 				serializer.startTag(null, name);
-				serializer.attribute(null, "name", i.toString());
+				serializer.attribute(null, ATTRIBUTE_TAG_NAME, i.toString());
 		    	addIsItemTag(serializer,i);
 		    	addChildrenTag(serializer,i);
 		    	addDescriptionTag(serializer,i);
@@ -158,13 +170,11 @@ public class CollectionDataStorage {
 		
 	}
 	
-	
-
 	public static void addIsItemTag(XmlSerializer serializer, CollectionItem i){
 		try {
-			serializer.startTag(null, "isItem");
+			serializer.startTag(null, IS_ITEM_TAG);
 			serializer.text(""+i.isItem());
-			serializer.endTag(null, "isItem");
+			serializer.endTag(null, IS_ITEM_TAG);
 		} catch (IllegalArgumentException | IllegalStateException | IOException e) {
 			e.printStackTrace();
 		}
@@ -172,14 +182,11 @@ public class CollectionDataStorage {
 	
 	public static void addChildrenTag(XmlSerializer serializer, CollectionItem i){
 		try {
-			serializer.startTag(null, "children");
+			serializer.startTag(null, CHILDREN_TAG);
 			if(i.getChildren()!= null){
-				addCollectionItemsTags(serializer,i.getChildren(),"CollectionItem");
+				addCollectionItemsTags(serializer,i.getChildren(),COLLECTION_ITEM_TAG);
 			}
-			else{
-				serializer.text("null");
-			}
-			serializer.endTag(null, "children");
+			serializer.endTag(null, CHILDREN_TAG);
 		} catch (IllegalArgumentException | IllegalStateException | IOException e) {
 			e.printStackTrace();
 		}
@@ -187,23 +194,248 @@ public class CollectionDataStorage {
 	
 	public static void addDescriptionTag(XmlSerializer serializer,CollectionItem i) {
 		try {
-			serializer.startTag(null, "description");
+			serializer.startTag(null, DESCRIPTION_TAG);
 			if(i.isItem()){
 				for(String field: i.getKeys()){
-					serializer.startTag(null, "field");
-					serializer.attribute(null, "fieldName", field);
+					serializer.startTag(null, DESCRIPTION_FIELD_TAG);
+					serializer.attribute(null, ATTRIBUTE_TAG_NAME, field);
 					serializer.text(i.getDescription(field));
-					serializer.endTag(null, "field");
+					serializer.endTag(null, DESCRIPTION_FIELD_TAG);
 				}
 			}
-			else
-				serializer.text("null");
 			
-			serializer.endTag(null, "description");
+			serializer.endTag(null, DESCRIPTION_TAG);
 		} catch (IllegalArgumentException | IllegalStateException | IOException e) {
 			e.printStackTrace();
 		}
 		
+	}
+	
+	public static void loadData(){
+		
+		try {
+			XmlPullParserFactory factory = XmlPullParserFactory.newInstance();
+			factory.setNamespaceAware(true);
+	        XmlPullParser xpp = factory.newPullParser();
+	        File myXML = getFile();
+	        FileInputStream fis = new FileInputStream(myXML);
+	        xpp.setInput(fis,null);
+	        
+	        xpp.nextTag();
+	        xpp.require(XmlPullParser.START_TAG, null, COLLECTION_ITEM_TAG);
+	        
+	        while(xpp.getName().equals(COLLECTION_ITEM_TAG)) {
+	        		
+	        		Base.setName("Top Level");
+	        		Base.setIsItem(false);//init the base object
+	        		Base.initializeChildren();
+	        		
+	        		loadCollectionItemTags(xpp, new CollectionItem(), Base);
+	        		xpp.nextTag();//get the next collectionItem tag
+	        }
+	        
+		} catch (XmlPullParserException | IOException e) {
+			Log.d("XmlPullParserError","this is not a start tag, or it does not have the name");
+			e.printStackTrace();
+			
+		}
+		Context context = CollectorsInventory.getContext();
+		CharSequence text = "Load Complete";
+		int duration = Toast.LENGTH_SHORT;
+
+		Toast toast = Toast.makeText(context, text, duration);
+		toast.show();
+	}
+	
+	public static void loadCollectionItemTags(XmlPullParser xpp, CollectionItem child, CollectionItem parent){
+		parent.addChildren(child);//add child
+		child.setParent(parent);//set parent
+		String name = xpp.getAttributeValue(null, ATTRIBUTE_TAG_NAME);
+		child.setName(name);
+		loadIsItemTag(xpp,child);
+		loadChildrenTag(xpp,child);
+		loadDescriptionTag(xpp,child);
+		Log.d("XmlPullParser", "Completed one cycle.  Name of parent: "+parent.toString());
+		try {
+			xpp.nextTag();
+			xpp.require(XmlPullParser.END_TAG, null, COLLECTION_ITEM_TAG);
+		} catch (XmlPullParserException | IOException e) {
+			Log.d("XmlPullParserError","next failed");
+			e.printStackTrace();
+		}//go to the end of this <collectionItem> tag
+		
+		
+		
+		
+	}
+	public static void loadIsItemTag(XmlPullParser xpp, CollectionItem child){
+		try {
+			xpp.nextTag();//get the isItem tag
+			xpp.require(XmlPullParser.START_TAG, null, IS_ITEM_TAG);
+			xpp.next();
+			String value = xpp.getText();
+			if(value.equals("true"))
+				child.setIsItem(true);
+			else
+				child.setIsItem(false);
+			
+			int state = xpp.next();
+			if(state==XmlPullParser.TEXT){
+				xpp.next();
+				xpp.require(XmlPullParser.END_TAG, null, IS_ITEM_TAG);
+			}
+			else{
+				xpp.require(XmlPullParser.END_TAG, null, IS_ITEM_TAG);
+			}
+			//xpp.next();//UNECESSARY, BUT NECESSARY BECAUSE OF BUG THAT DOES NOT ADVANCE THE PARSER
+			//xpp.nextTag();//move to the end tag
+			//xpp.require(XmlPullParser.END_TAG, null, IS_ITEM_TAG);
+			
+		} catch (XmlPullParserException | IOException e) {
+			Log.d("XmlPullParserError","this is not a start tag, or it does not have the name on the load is item");
+    		Log.d("XmlPullParserError","Name: "+xpp.getName());
+			e.printStackTrace();
+			
+    		
+		}
+	}
+	public static void loadChildrenTag(XmlPullParser xpp, CollectionItem child){
+		try {
+			xpp.nextTag();//get the ChildrenTag
+			xpp.require(XmlPullParser.START_TAG, null, CHILDREN_TAG);
+			while(xpp.nextTag() == XmlPullParser.START_TAG && xpp.getName().equals(COLLECTION_ITEM_TAG)){
+			//if(xpp.nextTag() == XmlPullParser.START_TAG){//this means that there are children.  now recursion
+        		child.initializeChildren();
+        		CollectionItem childChild =  new CollectionItem();
+        		child.addChildren(childChild);
+				loadCollectionItemTags(xpp, childChild, child);
+			}
+			
+			xpp.require(XmlPullParser.END_TAG, null, CHILDREN_TAG);
+			
+		} catch (XmlPullParserException | IOException e) {
+			Log.d("XmlPullParserError","this is not a start tag, or it does not have the name. on the children tag");
+    		Log.d("XmlPullParserError","Name: "+xpp.getName());
+			e.printStackTrace();
+			
+		} 
+	}
+	
+	public static void loadDescriptionTag(XmlPullParser xpp, CollectionItem child) {
+		try {
+			xpp.nextTag();
+			xpp.require(XmlPullParser.START_TAG, null, DESCRIPTION_TAG);
+			if(xpp.nextTag() == XmlPullParser.START_TAG && xpp.getName().equals(DESCRIPTION_FIELD_TAG)){
+				child.initializeDescription();
+				while(!xpp.getName().equals(DESCRIPTION_TAG)){
+					String fieldName = xpp.getAttributeValue(null, ATTRIBUTE_TAG_NAME);
+					xpp.next();
+					String fieldText = xpp.getText();
+					child.addNewFieldAndDescript(fieldName, fieldText);
+					//child.addDescription(fieldName, fieldText);
+					Log.d("Text Field Added", "Added this field: "+fieldName+" with this tag: "+fieldText);
+					xpp.nextTag();//its the end of the DESCRIPTION_FIELD_TAG
+					xpp.nextTag();//get either the next DESCRIPTION_FIELD_TAG or the the end of the DESCRIPTION_TAG
+				}
+			}
+			
+			//if(xpp.getName().equals())
+			
+			//else{
+			//	xpp.nextTag();//move to the end tag
+			//	xpp.require(XmlPullParser.END_TAG, null, DESCRIPTION_TAG);
+			//}
+			
+		} catch (XmlPullParserException | IOException e) {
+			Log.d("XmlPullParserError","this is not a start tag, or it does not have the name on the load description");
+    		Log.d("XmlPullParserError","Name: "+xpp.getName());
+			e.printStackTrace();
+			
+		}
+		
+	}
+	
+	
+	/*
+	  p.nextTag()
+   p.requireEvent(p.START_TAG, "", "tag");
+   String content = p.nextText();
+   p.requireEvent(p.END_TAG, "", "tag");
+ 
+This function together with nextTag make it very easy to parse XML that has no mixed content. 
+Essentially it does this 
+
+  if(getEventType() != START_TAG) {
+     throw new XmlPullParserException(
+       "parser must be on START_TAG to read next text", this, null);
+  }
+  int eventType = next();
+  if(eventType == TEXT) {
+     String result = getText();
+     eventType = next();
+     if(eventType != END_TAG) {
+       throw new XmlPullParserException(
+          "event TEXT it must be immediately followed by END_TAG", this, null);
+      }
+      return result;
+  } else if(eventType == END_TAG) {
+     return "";
+  } else {
+     throw new XmlPullParserException(
+       "parser must be on START_TAG or TEXT to read text", this, null);
+  }
+
+
+	 
+	 * 
+	 * 
+	 * 
+	 * 
+	 
+
+int type = xpp.getEventType();
+    v
+        if(type == XmlPullParser.START_DOCUMENT) {
+
+            Log.d(Tag, "In start document");
+        }
+        else if(type == XmlPullParser.START_TAG) {
+            Log.d(Tag, "In start tag = "+xpp.getName());
+        }
+        else if(type == XmlPullParser.END_TAG) {
+            Log.d(Tag, "In end tag = "+xpp.getName());
+
+        }
+        else if(type == XmlPullParser.TEXT) {
+            Log.d(Tag, "Have text = "+xpp.getText());
+            if(xpp.isWhitespace())
+            {
+
+            }
+            else
+            {
+                String strquery = xpp.getText();
+                db.execSQL(strquery);
+            }
+
+        }
+        type = xpp.next();
+    }
+
+	 */
+	
+	
+	
+	public static boolean deleteData(){
+		File file = getFile();
+		boolean deleted = file.delete();
+		//boolean x = CollectorsInventory.getContext().deleteFile(FILENAME);
+		Log.d("did it delete the file",deleted+"");
+		return deleted;
+	}
+	
+	public static File getFile(){
+		return CollectorsInventory.getContext().getFileStreamPath(FILENAME);
 	}
 	
 	/**
@@ -212,23 +444,19 @@ public class CollectionDataStorage {
 	 */
 	public static boolean savedData(){
 		Log.d("The file path", CollectorsInventory.getContext().getFilesDir().toString());
-		File file = CollectorsInventory.getContext().getFileStreamPath(FileName);
+		File file = getFile();
 		return file.exists();
 		
 	}
 	
-	private static void readData() {
+	private static void printData() {
 		Log.d("File: ","Look below");
 		BufferedReader reader = null;
 		try {
 			if(savedData()){
 				
-				File file = new File (CollectorsInventory.getContext().getFileStreamPath(FileName).toString());
-				
-				
-					reader = new BufferedReader(new FileReader(file));
-				
-				
+				File file = getFile();
+					reader = new BufferedReader(new FileReader(file));				
 				String text = null;
 	
 					while ((text = reader.readLine()) != null) {
@@ -253,7 +481,6 @@ public class CollectionDataStorage {
 		}
 		
 	}
-	
 	
 
 }

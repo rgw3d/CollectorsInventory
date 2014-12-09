@@ -45,7 +45,8 @@ public class CollectionItem {
 		Parent = parent;
 	}
 	public void initializeChildren(){
-		Children = new ArrayList<CollectionItem>();
+		if(Children==null)
+			Children = new ArrayList<CollectionItem>();
 	}
 	public void addChildren(CollectionItem child){
 		Children.add(child);
@@ -59,6 +60,9 @@ public class CollectionItem {
 	}
 	public void setName(String name){
 		Name = name;
+	}
+	public void setParent(CollectionItem parent){
+		Parent = parent;
 	}
 	public void initializeDescription(){
 		Description = new HashMap<String, ArrayList<String>>();
