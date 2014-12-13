@@ -29,7 +29,7 @@ public class CustomArrayAdapter extends ArrayAdapter<ArrayList<String>>{
 		*/
 		public CustomArrayAdapter(Context context, int textViewResourceId, ArrayList<ArrayList<String>> objects) {
 			super(context, textViewResourceId, objects);
-			this.objects = objects;		
+			this.objects = objects;
 			this.context = context;
 			this.root = ((ItemDetailActivity)context).getRoot();
 			Log.d("root in array adapter: ",root.toString());
@@ -141,13 +141,30 @@ public class CustomArrayAdapter extends ArrayAdapter<ArrayList<String>>{
 	            			objects.get(pos).remove(toRemove);
 	            			objects.get(pos).add(0,input.getText().toString());
 	            			
+	            			int hash = root.hashCode();
 	            			root.addDescription(input.getText().toString(), objects.get(pos).get(1));//add new key and descript
 	            			root.getDescription().remove(objects.get(pos).get(0));//remove key
+	            			
+	            			CollectionItem childToReplace =CollectionItem.findChildObject(hash, CollectionDataStorage.Base);
+	            			CollectionItem parent = childToReplace.getParent();
+	            			
+	            			if(parent!= null && !parent.isItem() && childToReplace!= null){
+	            				parent.removeChildren(childToReplace);
+	            				parent.addChildren(root);
+	            				
+	            				
+	            			}
+	            			
+	            			
+	            			
+	            			
+	            			
 	            			
 	            			
 	            			notifyDataSetChanged();
 	            			CollectionDataStorage.deleteData();
 	            			CollectionDataStorage.saveData();
+	            			CollectionDataStorage.printData();
 	            		}
 	            		else if (isDescription ==1 ){
 	            			String toRemove = objects.get(pos).get(isDescription);
@@ -161,6 +178,7 @@ public class CustomArrayAdapter extends ArrayAdapter<ArrayList<String>>{
 	            			notifyDataSetChanged();
 	            			CollectionDataStorage.deleteData();
 	            			CollectionDataStorage.saveData();
+	            			CollectionDataStorage.printData();
 	            		}
 	            		Log.d("Changed Key Set: ", root.printDescriptionKeys());
             		}

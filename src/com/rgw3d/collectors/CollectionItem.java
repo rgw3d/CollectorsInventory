@@ -52,6 +52,9 @@ public class CollectionItem {
 		Children.add(child);
 		child.Position = Children.indexOf(child);
 	}
+	public void removeChildren(CollectionItem child){
+		Children.remove(child);
+	}
 	public boolean isItem(){
 		return IsItem;
 	}

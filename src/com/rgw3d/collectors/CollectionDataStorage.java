@@ -36,8 +36,10 @@ public class CollectionDataStorage {
 		//deleteData();
 		if(savedData()){
 			 loadData();
+			 Log.d("Data:","Loading Data");
 		}
 		else{
+			Log.d("Data:","No saved data");
 		
 		Base.setName("Top Level");
 		Base.setIsItem(false);
@@ -120,7 +122,7 @@ public class CollectionDataStorage {
 		Base.addChildren(child4);
 		
 		
-		//saveData();
+		saveData();
 		
 		
 		}
@@ -129,11 +131,8 @@ public class CollectionDataStorage {
 	}
 	
 	public static void saveData(){
-
-		          
-
 	    try {
-	    		
+	    		Log.d("Data","Starting Save");
 	    		FileOutputStream fileOutputStream  = CollectorsInventory.getContext().openFileOutput(FILENAME,Context.MODE_APPEND);
 			    XmlSerializer serializer = Xml.newSerializer();
 			    serializer.setOutput(fileOutputStream, "UTF-8");
@@ -149,6 +148,7 @@ public class CollectionDataStorage {
 		} catch (IllegalArgumentException | IllegalStateException | IOException e) {
 			e.printStackTrace();
 		}
+	    Log.d("Data","Save Complete");
 	}
 
 	public static void addCollectionItemsTags(XmlSerializer serializer, ArrayList<CollectionItem> collectionItemList, String name){
@@ -199,6 +199,7 @@ public class CollectionDataStorage {
 				for(String field: i.getKeys()){
 					serializer.startTag(null, DESCRIPTION_FIELD_TAG);
 					serializer.attribute(null, ATTRIBUTE_TAG_NAME, field);
+					Log.d("Get Description Error: ","What is returned: "+i.getDescription(field));
 					serializer.text(i.getDescription(field));
 					serializer.endTag(null, DESCRIPTION_FIELD_TAG);
 				}
@@ -307,8 +308,7 @@ public class CollectionDataStorage {
 			//if(xpp.nextTag() == XmlPullParser.START_TAG){//this means that there are children.  now recursion
         		child.initializeChildren();
         		CollectionItem childChild =  new CollectionItem();
-        		child.addChildren(childChild);
-				loadCollectionItemTags(xpp, childChild, child);
+				loadCollectionItemTags(xpp, childChild, child);//Dont need to add to the parent
 			}
 			
 			xpp.require(XmlPullParser.END_TAG, null, CHILDREN_TAG);
@@ -332,20 +332,11 @@ public class CollectionDataStorage {
 					xpp.next();
 					String fieldText = xpp.getText();
 					child.addNewFieldAndDescript(fieldName, fieldText);
-					//child.addDescription(fieldName, fieldText);
 					Log.d("Text Field Added", "Added this field: "+fieldName+" with this tag: "+fieldText);
 					xpp.nextTag();//its the end of the DESCRIPTION_FIELD_TAG
 					xpp.nextTag();//get either the next DESCRIPTION_FIELD_TAG or the the end of the DESCRIPTION_TAG
 				}
 			}
-			
-			//if(xpp.getName().equals())
-			
-			//else{
-			//	xpp.nextTag();//move to the end tag
-			//	xpp.require(XmlPullParser.END_TAG, null, DESCRIPTION_TAG);
-			//}
-			
 		} catch (XmlPullParserException | IOException e) {
 			Log.d("XmlPullParserError","this is not a start tag, or it does not have the name on the load description");
     		Log.d("XmlPullParserError","Name: "+xpp.getName());
@@ -354,76 +345,6 @@ public class CollectionDataStorage {
 		}
 		
 	}
-	
-	
-	/*
-	  p.nextTag()
-   p.requireEvent(p.START_TAG, "", "tag");
-   String content = p.nextText();
-   p.requireEvent(p.END_TAG, "", "tag");
- 
-This function together with nextTag make it very easy to parse XML that has no mixed content. 
-Essentially it does this 
-
-  if(getEventType() != START_TAG) {
-     throw new XmlPullParserException(
-       "parser must be on START_TAG to read next text", this, null);
-  }
-  int eventType = next();
-  if(eventType == TEXT) {
-     String result = getText();
-     eventType = next();
-     if(eventType != END_TAG) {
-       throw new XmlPullParserException(
-          "event TEXT it must be immediately followed by END_TAG", this, null);
-      }
-      return result;
-  } else if(eventType == END_TAG) {
-     return "";
-  } else {
-     throw new XmlPullParserException(
-       "parser must be on START_TAG or TEXT to read text", this, null);
-  }
-
-
-	 
-	 * 
-	 * 
-	 * 
-	 * 
-	 
-
-int type = xpp.getEventType();
-    v
-        if(type == XmlPullParser.START_DOCUMENT) {
-
-            Log.d(Tag, "In start document");
-        }
-        else if(type == XmlPullParser.START_TAG) {
-            Log.d(Tag, "In start tag = "+xpp.getName());
-        }
-        else if(type == XmlPullParser.END_TAG) {
-            Log.d(Tag, "In end tag = "+xpp.getName());
-
-        }
-        else if(type == XmlPullParser.TEXT) {
-            Log.d(Tag, "Have text = "+xpp.getText());
-            if(xpp.isWhitespace())
-            {
-
-            }
-            else
-            {
-                String strquery = xpp.getText();
-                db.execSQL(strquery);
-            }
-
-        }
-        type = xpp.next();
-    }
-
-	 */
-	
 	
 	
 	public static boolean deleteData(){
@@ -449,7 +370,7 @@ int type = xpp.getEventType();
 		
 	}
 	
-	private static void printData() {
+	public static void printData() {
 		Log.d("File: ","Look below");
 		BufferedReader reader = null;
 		try {
