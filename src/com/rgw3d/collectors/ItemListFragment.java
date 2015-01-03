@@ -8,6 +8,9 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
@@ -37,6 +40,10 @@ public class ItemListFragment extends ListFragment {
 	public CollectionItem Root;
 	
 	public ArrayAdapter<CollectionItem> adapter;
+	
+	private boolean deleteItem = false;
+	
+	private boolean renameItem = false;
 	
 	
 	/**
@@ -104,6 +111,8 @@ public class ItemListFragment extends ListFragment {
 		
 		this.adapter = adapter;
 		
+		setHasOptionsMenu(true);
+		
 		Log.d("Starting List Fragment","Created!");
 		
 	}
@@ -146,8 +155,81 @@ public class ItemListFragment extends ListFragment {
 
 		// Notify the active callbacks interface (the activity, if the
 		// fragment is attached to one) that an item has been selected.
-		mCallbacks.onItemSelected(Root.getChildren(position).isItem(),Root.getChildren(position).hashCode());
-		//this calls the method from the Activity class above it
+		if(!deleteItem){
+			mCallbacks.onItemSelected(Root.getChildren(position).isItem(),Root.getChildren(position).hashCode());
+			//this calls the method from the Activity class above it
+		}
+		else{//prompt to make sure that the user wants to actually delete the item
+			final int pos = position;//this is just for the positive button.  it wants a final int.  
+			AlertDialog.Builder alert = new AlertDialog.Builder(getActivity());//make an Alert so the information can be edited
+			
+			alert.setTitle("Are you sure you want to delete this?");
+			
+			alert.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+
+				@Override
+				public void onClick(DialogInterface dialog, int which) {
+					adapter.remove(Root.getChildren(pos));
+					deleteItem = false;
+					
+					CollectionDataStorage.saveCycle();
+					
+				}
+				
+			});
+			
+			alert.setNegativeButton("No", new DialogInterface.OnClickListener() {
+
+				@Override
+				public void onClick(DialogInterface dialog, int which) {
+					deleteItem = false;
+					
+				}
+				
+			});
+			
+			alert.show();
+		}
+		
+	}
+	
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+	
+		Log.d("The call back in the fragment class","Fragment call back");
+		
+		int id = item.getItemId();
+		
+		if(id == R.id.delete_item){
+			if(deleteItem)
+				deleteItem=false;//if this option is selected while the bool is true, make it false
+			else{
+				AlertDialog.Builder alert = new AlertDialog.Builder(getActivity());//make an Alert so the information can be edited
+	
+				alert.setTitle("Select anything to Delete it");
+				alert.setMessage("Select the delete option again to exit this function");
+				
+				alert.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+						deleteItem=true;
+					}
+				});
+				
+				alert.setNegativeButton("Cancle", new DialogInterface.OnClickListener() {
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+						deleteItem=false;				
+					}
+				});
+				
+				alert.show();
+			}
+		}
+		return true;
+	}
+	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater){
+		inflater.inflate(R.menu.listfragmentmenu, menu);//add the particular delete item to the listMenu
 	}
 	
 
@@ -185,7 +267,6 @@ public class ItemListFragment extends ListFragment {
 
 	public void addNewList() {
 		
-		Log.d("This was called","lol");
     	
     	AlertDialog.Builder alert = new AlertDialog.Builder(getActivity());//make an Alert so the information can be edited
 
@@ -207,6 +288,7 @@ public class ItemListFragment extends ListFragment {
 					child.initializeChildren();
 					Root.addChildren(child);
 					adapter.notifyDataSetChanged();
+					CollectionDataStorage.saveCycle();
 				}
 				else {
 					//do nothing, no text means nothing to create
@@ -246,6 +328,7 @@ public class ItemListFragment extends ListFragment {
 					child.initializeDescription();
 					Root.addChildren(child);
 					adapter.notifyDataSetChanged();
+					CollectionDataStorage.saveCycle();
 				}
 				else {
 					//do nothing, no text means nothing to create

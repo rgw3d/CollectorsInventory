@@ -147,7 +147,7 @@ public class ItemListActivity extends ActionBarActivity implements
 	}
 	
 	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
+	public boolean onOptionsItemSelected(MenuItem item) {//returning true or false determines if fragment onOptionsItemSelected() is called
 		int id = item.getItemId();
 		if (id == android.R.id.home) {
 			// This ID represents the Home or Up button. In the case of this
@@ -173,13 +173,16 @@ public class ItemListActivity extends ActionBarActivity implements
 		}
 		else if( id == R.id.add_new_list){
 			((ItemListFragment) getSupportFragmentManager().findFragmentByTag(FragmentKeyWord)).addNewList();
+			return true;
 		}
 		else if( id == R.id.add_new_item){
 			((ItemListFragment) getSupportFragmentManager().findFragmentByTag(FragmentKeyWord)).addNewItem();
+			return true;
 		}
-		return super.onOptionsItemSelected(item);
+		return false;
 	}
 	
+	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.listmenu, menu);
