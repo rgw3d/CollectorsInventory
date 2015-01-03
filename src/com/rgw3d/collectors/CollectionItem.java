@@ -18,7 +18,7 @@ public class CollectionItem {
 	private String Name = "Detail 1";
 	private boolean IsItem = true;
 	private ArrayList<CollectionItem> Children = null;
-	private Map<String, ArrayList<String>> Description = null;
+	private Map<String, String> Description = null;
 	private ArrayList<String> Keys = null;
 	private CollectionItem Parent = null;
 	public int Position=0;//something that might be implemented later to make sure that everything is displayed correctly
@@ -28,7 +28,7 @@ public class CollectionItem {
 			ArrayList<CollectionItem> children, 
 			boolean isItem, 
 			String name, 
-			Map<String, ArrayList<String>> description){
+			Map<String, String> description){
 		Parent = parent;
 		Children = children;
 		IsItem = isItem;
@@ -68,26 +68,32 @@ public class CollectionItem {
 		Parent = parent;
 	}
 	public void initializeDescription(){
-		Description = new HashMap<String, ArrayList<String>>();
+		Description = new HashMap<String, String>();
 		Keys = new ArrayList<String>();
 	}
 	public void addNewFieldAndDescript(String field,String dscrpt){
-		ArrayList<String> descriptions = new ArrayList<String>();
-		descriptions.add(dscrpt);
-		Description.put(field, descriptions);
-		Keys.add(field);
-	}
-	public void addNewFieldAndDescript(String field,ArrayList<String> dscrpt){
 		Description.put(field, dscrpt);
 		Keys.add(field);
 	}
 	public void addDescription(String key, String dscrpt){
-		if(Description.containsKey(key))
-			Description.get(key).add(dscrpt);
+		if(Description.containsKey(key)){
+			String toModify = Description.get(key);
+			toModify+="\n"+dscrpt;
+			Description.put(key, toModify);
+		}
 	}
-	public void changeDescription(String key, String dscrpt,int index){
-		if(Description.containsKey(key))
-			Description.get(key).set(index, dscrpt);
+	public void changeDescription(String key, String dscrpt){
+			Description.put(key, dscrpt);
+	}
+	public void changeKey(String oldKey, String newKey){
+		if(Description.containsKey(oldKey)){
+			String description = Description.get(oldKey);
+			int keyIndex = Keys.indexOf(oldKey);
+			Keys.remove(oldKey);//make sure the key change is seen in the key list
+			Keys.add(keyIndex,newKey);
+			Description.remove(oldKey);//remove and then put the new key in
+			Description.put(newKey, description);
+		}
 	}
 	
 	public ArrayList<String> getKeys(){
@@ -104,14 +110,9 @@ public class CollectionItem {
 	public CollectionItem getParent(){
 		return Parent;
 	}
-	
-	
-	public Map<String,ArrayList<String>> getDescription(){
-		
+	public Map<String,String> getDescription(){
 		return Description;
 	}
-	
-	
 	
 	@Override
 	public String toString(){
@@ -128,7 +129,6 @@ public class CollectionItem {
 				+ ((Description == null) ? 0 : Description.hashCode());
 		result = prime * result + (IsItem ? 1231 : 1237);
 		result = prime * result + ((Name == null) ? 0 : Name.hashCode());
-		result = prime * result + Position;
 		return result;
 	}
 
@@ -211,7 +211,7 @@ public class CollectionItem {
 			return null;
 	}
 	
-	public ArrayList<String> getHTMLDescription(){
+	/*public ArrayList<String> getHTMLDescription(){
 		ArrayList<String> stringDescript = new ArrayList<String>();
 		for(String key: Description.keySet().toArray(new String[0])){//add each field
 			Log.d("Detail Fragment","The key: "+key);
@@ -226,9 +226,10 @@ public class CollectionItem {
 		}
 		return stringDescript;
 	}
+	*/
 	
 	public ArrayList<ArrayList<String>> getKeyAndDescription(){
-		String key[] = Description.keySet().toArray(new String[0]);
+		String key[] = getKeys().toArray(new String[0]);
 		Log.d("Key length","Key legnth: "+	key.length);
 		ArrayList<ArrayList<String>> resultant = new ArrayList<ArrayList<String>>();
 		for(int x = 0; x<key.length; x++){
@@ -240,12 +241,10 @@ public class CollectionItem {
 		return resultant;
 	}
 	public String getDescription(String key){
-		ArrayList<String> x = Description.get(key);
-		String toReturn = "";
-		for(String y: x){
-			toReturn+=y+"\n";
+		if(Description.containsKey(key)){
+			return Description.get(key);
 		}
-		return toReturn.substring(0,toReturn.length()-1);
+		return "Error in getting the description";
 	}
 	public String printDescriptionKeys(){
 		String resultant = "";
@@ -253,6 +252,12 @@ public class CollectionItem {
 			resultant.concat(x+"\n");
 		}
 		return resultant;
+	}
+
+	public void removeDescription(String key) {
+		Description.remove(key);
+		Keys.remove(key);
+		
 	}
 	
 	

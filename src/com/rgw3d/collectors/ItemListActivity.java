@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.support.v4.app.NavUtils;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
+import android.view.Menu;
 import android.view.MenuItem;
 
 /**
@@ -35,6 +36,14 @@ public class ItemListActivity extends ActionBarActivity implements
 	
 	private CollectionItem parentItem = null;
 	
+	private CollectionItem root = null;
+	
+	private String FragmentKeyWord = "FragmentKeyWord";
+	   
+	public CollectionItem getRoot(){
+		return root;
+	}
+	
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -48,15 +57,20 @@ public class ItemListActivity extends ActionBarActivity implements
 				arguments.putInt(ItemListFragment.ARG_ITEM_HASH, 
 					getIntent().getExtras()
 					.getInt(ItemListFragment.ARG_ITEM_HASH));
+				root = CollectionItem.findChildObject(getIntent().getExtras().getInt(ItemListFragment.ARG_ITEM_HASH),CollectionDataStorage.Base);
 				
-				parentItem = CollectionItem.findParentObject(getIntent().getExtras().getInt(ItemListFragment.ARG_ITEM_HASH), CollectionDataStorage.Base);
 				
 			}
+			
+			if(root == null){
+				root = CollectionDataStorage.Base;
+			}
+			parentItem = root.getParent();
 			
 			ItemListFragment fragment = new ItemListFragment();
 			fragment.setArguments(arguments);
 			getSupportFragmentManager().beginTransaction()
-				.add(R.id.item_list_container, fragment).commit();
+				.add(R.id.item_list_container, fragment, FragmentKeyWord).commit();
 			Log.d("Item List Activity", "Fragment Transaction Complete");
 		
 			
@@ -157,7 +171,19 @@ public class ItemListActivity extends ActionBarActivity implements
 				return false;
 			}
 		}
+		else if( id == R.id.add_new_list){
+			((ItemListFragment) getSupportFragmentManager().findFragmentByTag(FragmentKeyWord)).addNewList();
+		}
+		else if( id == R.id.add_new_item){
+			((ItemListFragment) getSupportFragmentManager().findFragmentByTag(FragmentKeyWord)).addNewItem();
+		}
 		return super.onOptionsItemSelected(item);
+	}
+	
+	public boolean onCreateOptionsMenu(Menu menu) {
+		// Inflate the menu; this adds items to the action bar if it is present.
+		getMenuInflater().inflate(R.menu.listmenu, menu);
+		return true;
 	}
 	
 }

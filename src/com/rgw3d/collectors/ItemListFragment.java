@@ -1,12 +1,18 @@
 package com.rgw3d.collectors;
 
+import com.rgw3d.collectors.CustomListArrayAdapter.LongClickListener;
+
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
 import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.TextView;
 
 
 /**
@@ -30,6 +36,8 @@ public class ItemListFragment extends ListFragment {
 	
 	public CollectionItem Root;
 	
+	public ArrayAdapter<CollectionItem> adapter;
+	
 	
 	/**
 	 * The fragment's current callback object, which is notified of list item
@@ -48,9 +56,6 @@ public class ItemListFragment extends ListFragment {
 	 * selections.
 	 */
 	public interface Callbacks {
-		/**
-		 * Callback for when an item has been selected.
-		 */
 		public void onItemSelected(boolean isItem, int hashCode);
 	}
 
@@ -75,12 +80,9 @@ public class ItemListFragment extends ListFragment {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		
-		
 		if (getArguments() != null && getArguments().containsKey(ARG_ITEM_HASH)) {
 			Log.d("Starting List Fragment","It has the key ARG_ITEM_HASH");
-			// Load the dummy content specified by the fragment
-			// arguments. In a real-world scenario, use a Loader
-			// to load content from a content provider.
+			
 			Root = CollectionItem.findChildObject(getArguments().getInt(ARG_ITEM_HASH),CollectionDataStorage.Base);
 			if(Root == null){
 				Log.e("Error in ItemDetailFragment", "mItem is null.  Hashcode sent was wrong");
@@ -91,11 +93,17 @@ public class ItemListFragment extends ListFragment {
 			Log.d("Starting List Fragment", "it does not have the key");
 			Root = CollectionDataStorage.Base;
 		}
-			
 		
-		setListAdapter(new ArrayAdapter<CollectionItem>(getActivity(),
-				android.R.layout.simple_list_item_activated_1,
-				android.R.id.text1, Root.getChildren()));
+		//CustomListArrayAdapter adapter = new CustomListArrayAdapter(getActivity(),R.layout.custom_array_adapter_list_view,R.id.text_view_title,Root.getChildren());
+		
+		//setListAdapter(adapter);
+		
+		ArrayAdapter<CollectionItem> adapter = new ArrayAdapter<CollectionItem>(getActivity(),R.layout.custom_array_adapter_list_view,R.id.text_view_title,Root.getChildren());
+		
+		setListAdapter(adapter);
+		
+		this.adapter = adapter;
+		
 		Log.d("Starting List Fragment","Created!");
 		
 	}
@@ -105,12 +113,9 @@ public class ItemListFragment extends ListFragment {
 	public void onViewCreated(View view, Bundle savedInstanceState) {
 		super.onViewCreated(view, savedInstanceState);
 		// Restore the previously serialized activated item position.
-		if (savedInstanceState != null
-				&& savedInstanceState.containsKey(STATE_ACTIVATED_POSITION)) {
-			setActivatedPosition(savedInstanceState
-					.getInt(STATE_ACTIVATED_POSITION));
+		if (savedInstanceState != null && savedInstanceState.containsKey(STATE_ACTIVATED_POSITION)) {
+			setActivatedPosition(savedInstanceState.getInt(STATE_ACTIVATED_POSITION));
 		}
-		Log.d("Starting List Fragment","On View Created!");
 	}
 
 	@Override
@@ -141,10 +146,10 @@ public class ItemListFragment extends ListFragment {
 
 		// Notify the active callbacks interface (the activity, if the
 		// fragment is attached to one) that an item has been selected.
-		
-		mCallbacks.onItemSelected(Root.getChildren(position).isItem(),Root.getChildren(position).hashCode());//this calls the method from the Activity class above it
-		//DummyContent.ITEMS.get(position).id
+		mCallbacks.onItemSelected(Root.getChildren(position).isItem(),Root.getChildren(position).hashCode());
+		//this calls the method from the Activity class above it
 	}
+	
 
 	@Override
 	public void onSaveInstanceState(Bundle outState) {
@@ -165,6 +170,7 @@ public class ItemListFragment extends ListFragment {
 		getListView().setChoiceMode(
 				activateOnItemClick ? ListView.CHOICE_MODE_SINGLE
 						: ListView.CHOICE_MODE_NONE);
+		
 	}
 
 	private void setActivatedPosition(int position) {
@@ -175,5 +181,86 @@ public class ItemListFragment extends ListFragment {
 		}
 
 		mActivatedPosition = position;
+	}
+
+	public void addNewList() {
+		
+		Log.d("This was called","lol");
+    	
+    	AlertDialog.Builder alert = new AlertDialog.Builder(getActivity());//make an Alert so the information can be edited
+
+		alert.setTitle("Set Title");
+		
+
+    	// Set an EditText view to get user input 
+    	final EditText input = new EditText(getActivity());
+    	input.setHint("List Name");//create the variable EditText input and tell it to set the hint to be what was clicked on
+    	
+    	alert.setView(input);//display the edit text field
+
+    	alert.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+			
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				if(!input.getText().toString().equals("")){
+					CollectionItem child = new CollectionItem(Root,null,false,input.getText().toString(),null);
+					child.initializeChildren();
+					Root.addChildren(child);
+					adapter.notifyDataSetChanged();
+				}
+				else {
+					//do nothing, no text means nothing to create
+				}
+				
+			}
+		});
+		alert.setNegativeButton("Cancle", new DialogInterface.OnClickListener() {
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				//do nothing.  this is the cancel button
+				
+			}
+		});
+		
+		alert.show();
+	}
+	
+	public void addNewItem(){
+		AlertDialog.Builder alert = new AlertDialog.Builder(getActivity());//make an Alert so the information can be edited
+
+		alert.setTitle("Set Name");
+		
+
+    	// Set an EditText view to get user input 
+    	final EditText input = new EditText(getActivity());
+    	input.setHint("Item Name");//create the variable EditText input and tell it to set the hint to be what was clicked on
+    	
+    	alert.setView(input);//display the edit text field
+
+    	alert.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+			
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				if(!input.getText().toString().equals("")){
+					CollectionItem child = new CollectionItem(Root,null,true,input.getText().toString(),null);
+					child.initializeDescription();
+					Root.addChildren(child);
+					adapter.notifyDataSetChanged();
+				}
+				else {
+					//do nothing, no text means nothing to create
+				}
+				
+			}
+		});
+		alert.setNegativeButton("Cancle", new DialogInterface.OnClickListener() {
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				//do nothing.  this is the cancel button
+				
+			}
+		});
+		
+		alert.show();
 	}
 }

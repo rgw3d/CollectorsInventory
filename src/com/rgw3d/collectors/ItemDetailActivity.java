@@ -1,11 +1,18 @@
 package com.rgw3d.collectors;
 
+
+
+import android.annotation.SuppressLint;
+import android.app.ActionBar;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.ActionBar.OnNavigationListener;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v4.app.NavUtils;
 import android.util.Log;
+import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ArrayAdapter;
 
 /**
  * An activity representing a single Item detail screen. This activity is only
@@ -15,10 +22,12 @@ import android.view.MenuItem;
  * This activity is mostly just a 'shell' activity containing nothing more than
  * a {@link ItemDetailFragment}.
  */
-public class ItemDetailActivity extends ActionBarActivity {
+@SuppressLint("NewApi")
+public class ItemDetailActivity extends ActionBarActivity implements OnNavigationListener{
 
 	private CollectionItem parentItem;
 	private CollectionItem root;
+	private String FragmentKeyWord = "FragmentKeyWord";
 	public CollectionItem getRoot(){
 		return root;
 	}
@@ -48,39 +57,49 @@ public class ItemDetailActivity extends ActionBarActivity {
 			arguments.putInt(ItemDetailFragment.ARG_ITEM_HASH, 
 					getIntent().getExtras()
 					.getInt(ItemDetailFragment.ARG_ITEM_HASH));
-			parentItem = CollectionItem.findParentObject(getIntent().getExtras().getInt(ItemDetailFragment.ARG_ITEM_HASH), CollectionDataStorage.Base);
+			
 			root = CollectionItem.findChildObject(getIntent().getExtras().getInt(ItemDetailFragment.ARG_ITEM_HASH), CollectionDataStorage.Base);
+			parentItem = root.getParent();
 			ItemDetailFragment fragment = new ItemDetailFragment();
+			
 			fragment.setArguments(arguments);
 			getSupportFragmentManager().beginTransaction()
-					.add(R.id.item_detail_container, fragment).commit();
+					.add(R.id.item_detail_container, fragment,FragmentKeyWord).commit();
 		}
+		
+		
 	}
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		int id = item.getItemId();
 		if (id == android.R.id.home) {
-			// This ID represents the Home or Up button. In the case of this
-			// activity, the Up button is shown. Use NavUtils to allow users
-			// to navigate up one level in the application structure. For
-			// more details, see the Navigation pattern on Android Design:
-			//
-			// http://developer.android.com/design/patterns/navigation.html#up-vs-back
-			//
-			
 			Intent intent = new Intent(this,ItemListActivity.class);
 			
 			if(parentItem!=null){
-				Log.d("Action bar","From detail to list");
+				Log.d("Action bar Navegation","From detail to list");
 				intent.putExtra(ItemListFragment.ARG_ITEM_HASH, parentItem.hashCode());
-				
 			}
 			else
-				Log.d("Action bar","it returned false, supposedly nothing to navegate too..");
+				Log.d("Action bar Navegation","it returned false, supposedly nothing to navegate too..");
 			NavUtils.navigateUpTo(this,intent);
 			return true;
 		}
+		else if(id == R.id.add_new_description){
+			((ItemDetailFragment) getSupportFragmentManager().findFragmentByTag(FragmentKeyWord)).addNewDescription();
+		}
 		return super.onOptionsItemSelected(item);
 	}
+	
+	public boolean onCreateOptionsMenu(Menu menu) {
+		// Inflate the menu; this adds items to the action bar if it is present.
+		getMenuInflater().inflate(R.menu.detailmenu, menu);
+		return true;
+	}
+
+	@Override
+	public boolean onNavigationItemSelected(int arg0, long arg1) {
+		return false;
+	}
+	
 }

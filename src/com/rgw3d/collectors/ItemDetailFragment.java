@@ -1,8 +1,12 @@
 package com.rgw3d.collectors;
 
+import java.util.ArrayList;
+
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
 import android.util.Log;
+import android.view.Menu;
 
 
 /**
@@ -10,6 +14,7 @@ import android.util.Log;
  * contained in a {@link ItemListActivity} in two-pane mode (on tablets) or a
  * {@link ItemDetailActivity} on handsets.
  */
+@SuppressLint("NewApi")
 public class ItemDetailFragment extends ListFragment {
 	/**
 	 * The fragment argument representing the item ID that this fragment
@@ -22,9 +27,7 @@ public class ItemDetailFragment extends ListFragment {
 	 */
 	private CollectionItem root;
 	
-	
-	
-	private CustomArrayAdapter adapter;
+	private CustomDetailArrayAdapter adapter;
 
 	/**
 	 * Mandatory empty constructor for the fragment manager to instantiate the
@@ -46,78 +49,23 @@ public class ItemDetailFragment extends ListFragment {
 			}
 			Log.d("Orig Key Set after root is created: ", root.printDescriptionKeys());
 			
-			adapter = new CustomArrayAdapter(getActivity(),
-			        android.R.layout.simple_list_item_1, root.getKeyAndDescription());
+			adapter = new CustomDetailArrayAdapter(getActivity(),
+			        android.R.layout.simple_list_item_activated_1, 
+			        root.getKeyAndDescription());
 			setListAdapter(adapter);
 			
-			/*setListAdapter(new ArrayAdapter<String>(getActivity(),
-					android.R.layout.simple_list_item_activated_1,
-					android.R.id.text1,root.getHTMLDescription()));
-			*/
-			
 		}
 	}
 	
-	/*@Override
-	public void onActivityCreated(Bundle savedState) {
-	    super.onActivityCreated(savedState);
-    	Log.d("Long Click","Okay so it should be creating the listener here");
-    	getListView().setOnItemClickListener(this);
-	    getListView().setOnItemLongClickListener(this);
-	}
-	
-	public boolean onItemLongClick(AdapterView<?> arg0, View v, int position, long id) {
-		Log.d("Long click","Wow it actually worked");
-        
-        return true;
-    }
-	
-	public void onItemClick(AdapterView<?> arg0, View v, int position, long id) {
-		//super.onListItemClick(arg0, v, position, id);
-		Toast.makeText(getActivity(), "Item " + position + " was clicked", Toast.LENGTH_SHORT).show();
-		Log.d("Long Click", "There was a click");
-	}
-	
-	public void onListItemClick(ListView listView, View view, int position,
-			long id){
-		super.onListItemClick(listView, view, position, id);
-		Toast.makeText(getActivity(), "Item asldkfjsdf " + position + " was clicked", Toast.LENGTH_SHORT).show();
-	}
-	*/
-}
-
-	
-/*
-new OnItemLongClickListener() {
-
-	        public boolean onItemLongClick(AdapterView<?> arg0, View v,
-	                int position, long id) {
-	            
-	            return true;
-	        }
-	    }
-
-
-
- * 
-	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container,
-			Bundle savedInstanceState) {
-		View rootView = inflater.inflate(R.layout.fragment_item_detail,
-				container, false);
+	public void addNewDescription(){
+		ArrayList<String> newData = new ArrayList<String>();
+		newData.add("Field Title");
+		newData.add("Description");
+		adapter.add(newData);
 		
-		if(root != null) {
-			Log.d("Detail Fragment","It is making the views");
-			ListView lv = (ListView) rootView.findViewById(R.id.listView1);			
-			adapter = new CustomArrayAdapter(getActivity(),
-			        android.R.layout.simple_list_item_1, root.getHTMLDescription());
-			
-			lv.setAdapter(adapter);
-		}
-
-		return rootView;
 	}
-	*/
 	
+
+}
 	
 

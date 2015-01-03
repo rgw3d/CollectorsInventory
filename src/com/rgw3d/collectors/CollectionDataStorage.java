@@ -199,7 +199,6 @@ public class CollectionDataStorage {
 				for(String field: i.getKeys()){
 					serializer.startTag(null, DESCRIPTION_FIELD_TAG);
 					serializer.attribute(null, ATTRIBUTE_TAG_NAME, field);
-					Log.d("Get Description Error: ","What is returned: "+i.getDescription(field));
 					serializer.text(i.getDescription(field));
 					serializer.endTag(null, DESCRIPTION_FIELD_TAG);
 				}
@@ -401,6 +400,12 @@ public class CollectionDataStorage {
 			}
 		}
 		
+	}
+	
+	public static void saveCycle(){
+		deleteData();
+		saveData();
+		printData();
 	}
 	
 
