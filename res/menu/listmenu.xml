@@ -2,7 +2,8 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android" >
     <item android:id="@+id/add_new_list" android:title="@string/add_new_list"></item>
     <item android:id="@+id/add_new_item" android:title="@string/add_new_item"></item>
-    
+    <item android:id="@+id/delete_item" android:title="@string/delete_item"></item>
+    <item android:id="@+id/rename_item" android:title="@string/rename_item"></item>
     
 
 </menu>

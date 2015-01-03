@@ -37,8 +37,6 @@ public class ItemListActivity extends ActionBarActivity implements
 	private CollectionItem parentItem = null;
 	
 	private CollectionItem root = null;
-	
-	private String FragmentKeyWord = "FragmentKeyWord";
 	   
 	public CollectionItem getRoot(){
 		return root;
@@ -70,7 +68,7 @@ public class ItemListActivity extends ActionBarActivity implements
 			ItemListFragment fragment = new ItemListFragment();
 			fragment.setArguments(arguments);
 			getSupportFragmentManager().beginTransaction()
-				.add(R.id.item_list_container, fragment, FragmentKeyWord).commit();
+				.add(R.id.item_list_container, fragment).commit();
 			Log.d("Item List Activity", "Fragment Transaction Complete");
 		
 			
@@ -171,21 +169,15 @@ public class ItemListActivity extends ActionBarActivity implements
 				return false;
 			}
 		}
-		else if( id == R.id.add_new_list){
-			((ItemListFragment) getSupportFragmentManager().findFragmentByTag(FragmentKeyWord)).addNewList();
-			return true;
-		}
-		else if( id == R.id.add_new_item){
-			((ItemListFragment) getSupportFragmentManager().findFragmentByTag(FragmentKeyWord)).addNewItem();
-			return true;
-		}
 		return false;
 	}
 	
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.listmenu, menu);
+		//getMenuInflater().inflate(R.menu.listmenu, menu);
+		
+		//everything creating a menu is taken care of in the fragment
 		return true;
 	}
 	

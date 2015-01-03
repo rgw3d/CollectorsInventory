@@ -155,11 +155,11 @@ public class ItemListFragment extends ListFragment {
 
 		// Notify the active callbacks interface (the activity, if the
 		// fragment is attached to one) that an item has been selected.
-		if(!deleteItem){
+		if(!deleteItem && !renameItem){
 			mCallbacks.onItemSelected(Root.getChildren(position).isItem(),Root.getChildren(position).hashCode());
 			//this calls the method from the Activity class above it
 		}
-		else{//prompt to make sure that the user wants to actually delete the item
+		else if( deleteItem && !renameItem){//prompt to make sure that the user wants to actually delete the item
 			final int pos = position;//this is just for the positive button.  it wants a final int.  
 			AlertDialog.Builder alert = new AlertDialog.Builder(getActivity());//make an Alert so the information can be edited
 			
@@ -177,7 +177,6 @@ public class ItemListFragment extends ListFragment {
 				}
 				
 			});
-			
 			alert.setNegativeButton("No", new DialogInterface.OnClickListener() {
 
 				@Override
@@ -190,6 +189,9 @@ public class ItemListFragment extends ListFragment {
 			
 			alert.show();
 		}
+		else if(!deleteItem && renameItem){
+			
+		}
 		
 	}
 	
@@ -201,7 +203,10 @@ public class ItemListFragment extends ListFragment {
 		int id = item.getItemId();
 		
 		if(id == R.id.delete_item){
-			if(deleteItem)
+			if(renameItem){
+				//do nothing if renameItem is already selected
+			}
+			else if(deleteItem)
 				deleteItem=false;//if this option is selected while the bool is true, make it false
 			else{
 				AlertDialog.Builder alert = new AlertDialog.Builder(getActivity());//make an Alert so the information can be edited
@@ -224,12 +229,28 @@ public class ItemListFragment extends ListFragment {
 				});
 				
 				alert.show();
+				
 			}
 		}
+		else if(id == R.id.rename_item){
+			if(renameItem){
+				renameItem = false;
+			}
+		}
+		else if( id == R.id.add_new_list){
+			addNewList();
+			return true;
+		}
+		else if( id == R.id.add_new_item){
+			addNewItem();
+			return true;
+		}
+		
+		
 		return true;
 	}
 	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater){
-		inflater.inflate(R.menu.listfragmentmenu, menu);//add the particular delete item to the listMenu
+		inflater.inflate(R.menu.listmenu, menu);//add the particular delete item to the listMenu
 	}
 	
 
