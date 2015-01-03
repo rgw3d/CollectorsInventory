@@ -191,6 +191,40 @@ public class ItemListFragment extends ListFragment {
 		}
 		else if(!deleteItem && renameItem){
 			
+			final int pos = position;//this is just for the positive button.  it wants a final int.  
+			AlertDialog.Builder alert = new AlertDialog.Builder(getActivity());//make an Alert so the information can be edited
+			
+			alert.setTitle("Please Enter the new Name");
+			
+			final EditText input = new EditText(getActivity());
+	    	input.setHint(Root.getChildren(pos).toString());//create the variable EditText input and tell it to set the hint to be what was clicked on
+	    	
+	    	alert.setView(input);//display the edit text field
+			
+			alert.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+
+				@Override
+				public void onClick(DialogInterface dialog, int which) {
+					Root.getChildren(pos).setName(input.getText().toString());
+					adapter.notifyDataSetChanged();
+					renameItem = false;
+					
+					CollectionDataStorage.saveCycle();
+					
+				}
+				
+			});
+			alert.setNegativeButton("Cancle", new DialogInterface.OnClickListener() {
+
+				@Override
+				public void onClick(DialogInterface dialog, int which) {
+					renameItem = false;
+					
+				}
+				
+			});
+			
+			alert.show();
 		}
 		
 	}
@@ -202,12 +236,11 @@ public class ItemListFragment extends ListFragment {
 		
 		int id = item.getItemId();
 		
-		if(id == R.id.delete_item){
-			if(renameItem){
-				//do nothing if renameItem is already selected
-			}
-			else if(deleteItem)
+		if(id == R.id.delete_item && !renameItem){
+			
+			if(deleteItem){
 				deleteItem=false;//if this option is selected while the bool is true, make it false
+			}
 			else{
 				AlertDialog.Builder alert = new AlertDialog.Builder(getActivity());//make an Alert so the information can be edited
 	
@@ -232,22 +265,45 @@ public class ItemListFragment extends ListFragment {
 				
 			}
 		}
-		else if(id == R.id.rename_item){
+		else if(id == R.id.rename_item && !deleteItem ){
 			if(renameItem){
 				renameItem = false;
 			}
+			else{
+				AlertDialog.Builder alert = new AlertDialog.Builder(getActivity());//make an Alert so the information can be edited
+				
+				alert.setTitle("Select Anything to Rename it");
+				alert.setMessage("Select the rename option again to exit this function");
+				
+				alert.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+						renameItem=true;
+					}
+				});
+				
+				alert.setNegativeButton("Cancle", new DialogInterface.OnClickListener() {
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+						renameItem=false;				
+					}
+				});
+				
+				alert.show();
+			}
 		}
-		else if( id == R.id.add_new_list){
+		else if( id == R.id.add_new_list && !deleteItem && !renameItem){
 			addNewList();
 			return true;
 		}
-		else if( id == R.id.add_new_item){
+		else if( id == R.id.add_new_item && !deleteItem && !renameItem){
 			addNewItem();
 			return true;
 		}
 		
 		
 		return true;
+		
 	}
 	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater){
 		inflater.inflate(R.menu.listmenu, menu);//add the particular delete item to the listMenu
