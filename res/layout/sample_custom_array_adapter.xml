@@ -4,11 +4,9 @@
     android:id="@+id/relativeLayoutCustomArrayAdapter"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical" 
     android:descendantFocusability="blocksDescendants"
-    >
-    
-    
+    android:orientation="vertical"
+     >
    
     <TextView
 		 	    android:id="@+id/text_view_title"
@@ -25,5 +23,14 @@
 		       	android:layout_below = "@id/text_view_title"
 		       	/>
 
+   <ImageView
+       android1:id="@+id/imageView1"
+       android1:layout_width="wrap_content"
+       android1:layout_height="wrap_content"
+       android1:layout_alignParentRight="true"
+       android1:layout_marginRight="2dp"
+       android1:contentDescription="@string/desc"
+       android1:gravity="right"
+      />
 
 </RelativeLayout>

@@ -86,7 +86,10 @@ public class ItemDetailActivity extends ActionBarActivity implements OnNavigatio
 			return true;
 		}
 		else if(id == R.id.add_new_description){
-			((ItemDetailFragment) getSupportFragmentManager().findFragmentByTag(FragmentKeyWord)).addNewDescription();
+			((ItemDetailFragment) getSupportFragmentManager().findFragmentByTag(FragmentKeyWord)).addNewDescription("Field Title", "Description");
+		}
+		else if(id == R.id.add_image){
+			((ItemDetailFragment) getSupportFragmentManager().findFragmentByTag(FragmentKeyWord)).addImage();
 		}
 		return super.onOptionsItemSelected(item);
 	}

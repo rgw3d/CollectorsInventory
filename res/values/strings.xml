@@ -9,6 +9,8 @@
     <string name="add_new_item">Add New Item</string>
     <string name="delete_item">Delete Item</string>
     <string name="rename_item">Rename Item</string>
+    <string name="add_image">Add Image</string>
+    <string name ="desc">An Image Taken by User</string>
     <string-array name="detail_menu">
         <item>Add Field</item>
         <item>Add Image</item>

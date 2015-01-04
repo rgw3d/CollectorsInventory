@@ -4,10 +4,8 @@
     tools:context="com.rgw3d.collectors.ItemDetailActivity" >
 
 
-    <item 
-        android:id = "@+id/add_new_description"
-        android:title = "@string/add_new_description"
-        />
+    <item android:id = "@+id/add_new_description" android:title = "@string/add_new_description"/>
+    <item android:id ="@+id/add_image" android:title = "@string/add_image"/>
     
 
 </menu>

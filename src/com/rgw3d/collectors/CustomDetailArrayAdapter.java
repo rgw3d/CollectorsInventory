@@ -7,12 +7,18 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.media.ThumbnailUtils;
+import android.net.Uri;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 /**
@@ -25,6 +31,7 @@ public class CustomDetailArrayAdapter extends ArrayAdapter<ArrayList<String>> {
 		private ArrayList<ArrayList<String>> objects;
 		private Context context;
 		private CollectionItem rootItem;
+		private final int THUMBSIZE = 504;
 
 		/* here we must override the constructor for ArrayAdapter
 		* the only variable we care about now is ArrayList<Item> objects,
@@ -65,28 +72,55 @@ public class CustomDetailArrayAdapter extends ArrayAdapter<ArrayList<String>> {
 			 * 
 			 * Therefore, i refers to the current Item object.
 			 */
-			String i = objects.get(position).get(0);
-			String o = objects.get(position).get(1);
+			final String i = objects.get(position).get(0);
+			final String o = objects.get(position).get(1);
 
 			if (i != null && o!= null) {
-
-				// This is how you obtain a reference to the TextViews.
-				// These TextViews are created in the XML files we defined.
-
-				TextView tv = (TextView) v.findViewById(R.id.text_view_title);
-				// check to see if each individual textview is null.
-				// if not, assign some text!
-				if (tv != null){
-					tv.setText(i);
-					tv.setOnLongClickListener(new LongClickTextListener(position,0));
+				
+				if(i.equals(ItemDetailFragment.IMAGE_FILE)){//we have an image!
+					Bitmap ThumbImage = ThumbnailUtils.extractThumbnail(BitmapFactory.decodeFile(o), THUMBSIZE, THUMBSIZE);//grab thumbnail
+					ImageView iv = (ImageView) v.findViewById(R.id.imageView1);
+					
+					if(iv != null){
+						iv.setImageBitmap(ThumbImage);
+						
+						iv.setOnClickListener(new View.OnClickListener() {
+							
+							@Override
+							public void onClick(View v) {
+								//context.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("image:/"+o)));
+								
+								Intent intent = new Intent();
+								intent.setAction(Intent.ACTION_VIEW);
+								intent.setDataAndType(Uri.parse("file://" + o), "image/*");
+								context.startActivity(intent);
+								
+								
+							}
+						});
+						
+					}
 				}
-				
-				
-				TextView tv2 = (TextView) v.findViewById(R.id.text_view_description);
-				
-				if(tv2 != null){
-					tv2.setText(o);
-					tv2.setOnLongClickListener(new LongClickTextListener(position,1));
+				else {//we have text
+					
+
+					// These TextViews are created in the XML files we defined.
+	
+					TextView tv = (TextView) v.findViewById(R.id.text_view_title);
+					// check to see if each individual textview is null.
+					// if not, assign some text!
+					if (tv != null){
+						tv.setText(i);
+						tv.setOnLongClickListener(new LongClickTextListener(position,0));
+					}
+					
+					
+					TextView tv2 = (TextView) v.findViewById(R.id.text_view_description);
+					
+					if(tv2 != null){
+						tv2.setText(o);
+						tv2.setOnLongClickListener(new LongClickTextListener(position,1));
+					}
 				}
 				
 			}
